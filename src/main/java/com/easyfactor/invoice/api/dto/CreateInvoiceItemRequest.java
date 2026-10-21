@@ -1,0 +1,16 @@
+package com.easyfactor.invoice.api.dto;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record CreateInvoiceItemRequest(
+        UUID productId,
+        @NotBlank @Size(max = 512) String description,
+        @Min(1) int quantity,
+        @DecimalMin("0.0") BigDecimal unitPrice) {
+}
