@@ -8,8 +8,6 @@ import java.util.UUID;
 import com.easyfactor.invoice.domain.Invoice;
 import com.easyfactor.invoice.domain.InvoiceItem;
 import com.easyfactor.invoice.domain.InvoiceStatus;
-import com.easyfactor.shared.domain.CurrencyCode;
-import com.easyfactor.shared.domain.Money;
 import com.easyfactor.shared.domain.PaymentProvider;
 
 public record InvoiceResponse(
@@ -20,10 +18,8 @@ public record InvoiceResponse(
         UUID customerId,
         Long customerTelegramUserId,
         String customerDisplayName,
-        CurrencyCode currency,
         List<InvoiceItem> items,
-        Money subtotal,
-        Money total,
+        long totalRials,
         LocalDate dueDate,
         String notes,
         PaymentProvider paymentProvider,

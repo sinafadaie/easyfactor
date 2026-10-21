@@ -3,7 +3,6 @@ package com.easyfactor.identity.domain;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.CurrencyCode;
 import com.easyfactor.telegram.domain.TelegramUser;
 
 /**
@@ -18,12 +17,11 @@ public class Owner {
     private String lastName;
     private String languageCode;
     private String shopName;
-    private CurrencyCode defaultCurrency;
     private final Instant createdAt;
     private Instant updatedAt;
 
     public Owner(UUID id, Long telegramUserId, String telegramUsername, String firstName, String lastName,
-            String languageCode, String shopName, CurrencyCode defaultCurrency, Instant createdAt, Instant updatedAt) {
+            String languageCode, String shopName, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.telegramUserId = telegramUserId;
         this.telegramUsername = telegramUsername;
@@ -31,7 +29,6 @@ public class Owner {
         this.lastName = lastName;
         this.languageCode = languageCode;
         this.shopName = shopName;
-        this.defaultCurrency = defaultCurrency;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -46,10 +43,6 @@ public class Owner {
     }
 
     public void renameShop(String newShopName) {
-        // TODO
-    }
-
-    public void changeDefaultCurrency(CurrencyCode currency) {
         // TODO
     }
 
@@ -79,10 +72,6 @@ public class Owner {
 
     public String getShopName() {
         return shopName;
-    }
-
-    public CurrencyCode getDefaultCurrency() {
-        return defaultCurrency;
     }
 
     public Instant getCreatedAt() {

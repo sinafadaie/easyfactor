@@ -5,7 +5,7 @@ import com.easyfactor.payment.domain.Payment;
 import org.springframework.stereotype.Component;
 
 /**
- * Maps Payment between domain aggregate and JPA entity (including Money <-> amount/currency).
+ * Maps Payment between domain aggregate and JPA entity.
  */
 @Component
 public class PaymentPersistenceMapper {

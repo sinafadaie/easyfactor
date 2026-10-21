@@ -1,6 +1,5 @@
 package com.easyfactor.invoice.persistence;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,11 +38,8 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
     @Column(name = "status", nullable = false, length = 32)
     private String status;
 
-    @Column(name = "currency", nullable = false, length = 8)
-    private String currency;
-
-    @Column(name = "total_amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal totalAmount;
+    @Column(name = "total_rials", nullable = false)
+    private long totalRials;
 
     @Column(name = "payment_provider", nullable = false, length = 32)
     private String paymentProvider;
@@ -115,20 +111,12 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
         this.status = status;
     }
 
-    public String getCurrency() {
-        return currency;
+    public long getTotalRials() {
+        return totalRials;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTotalRials(long totalRials) {
+        this.totalRials = totalRials;
     }
 
     public String getPaymentProvider() {

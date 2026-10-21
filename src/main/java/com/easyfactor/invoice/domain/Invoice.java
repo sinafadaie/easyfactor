@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.CurrencyCode;
-import com.easyfactor.shared.domain.Money;
 import com.easyfactor.shared.domain.PaymentProvider;
 
 /**
@@ -22,8 +20,7 @@ public class Invoice {
     private final String customerDisplayName;
     private InvoiceStatus status;
     private final List<InvoiceItem> items;
-    private Money total;
-    private final CurrencyCode currency;
+    private long totalRials;
     private final PaymentProvider paymentProvider;
     private final LocalDate dueDate;
     private final String notes;
@@ -33,7 +30,7 @@ public class Invoice {
     private Instant updatedAt;
 
     public Invoice(UUID id, String invoiceNumber, UUID ownerId, UUID customerId, Long customerTelegramUserId,
-            String customerDisplayName, InvoiceStatus status, List<InvoiceItem> items, Money total, CurrencyCode currency,
+            String customerDisplayName, InvoiceStatus status, List<InvoiceItem> items, long totalRials,
             PaymentProvider paymentProvider, LocalDate dueDate, String notes, Instant createdAt, Instant sentAt,
             Instant paidAt, Instant updatedAt) {
         this.id = id;
@@ -44,8 +41,7 @@ public class Invoice {
         this.customerDisplayName = customerDisplayName;
         this.status = status;
         this.items = items;
-        this.total = total;
-        this.currency = currency;
+        this.totalRials = totalRials;
         this.paymentProvider = paymentProvider;
         this.dueDate = dueDate;
         this.notes = notes;
@@ -90,9 +86,9 @@ public class Invoice {
         // TODO: throw BusinessException(INVALID_INVOICE_STATE) on illegal transition
     }
 
-    private Money recalculateTotal() {
+    private long recalculateTotal() {
         // TODO: sum of item line totals
-        return null;
+        return 0;
     }
 
     public UUID getId() {
@@ -127,12 +123,8 @@ public class Invoice {
         return items;
     }
 
-    public Money getTotal() {
-        return total;
-    }
-
-    public CurrencyCode getCurrency() {
-        return currency;
+    public long getTotalRials() {
+        return totalRials;
     }
 
     public PaymentProvider getPaymentProvider() {

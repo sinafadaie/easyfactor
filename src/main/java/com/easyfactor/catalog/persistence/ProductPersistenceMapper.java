@@ -5,7 +5,7 @@ import com.easyfactor.catalog.domain.Product;
 import org.springframework.stereotype.Component;
 
 /**
- * Maps Product between domain aggregate and JPA entity (including Money <-> amount/currency).
+ * Maps Product between domain aggregate and JPA entity.
  */
 @Component
 public class ProductPersistenceMapper {

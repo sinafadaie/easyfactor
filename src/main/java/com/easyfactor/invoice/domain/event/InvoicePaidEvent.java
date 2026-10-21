@@ -3,8 +3,6 @@ package com.easyfactor.invoice.domain.event;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.Money;
-
 /**
  * Published when an invoice is paid (Observer pattern).
  */
@@ -15,6 +13,6 @@ public record InvoicePaidEvent(
         UUID ownerId,
         UUID customerId,
         Long customerTelegramUserId,
-        Money total,
+        long totalRials,
         Instant paidAt) {
 }

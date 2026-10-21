@@ -6,7 +6,6 @@ CREATE TABLE owners (
     last_name           varchar(255),
     language_code       varchar(16),
     shop_name           varchar(255),
-    default_currency    varchar(8) NOT NULL DEFAULT 'XTR',
     created_at          timestamptz NOT NULL,
     updated_at          timestamptz NOT NULL,
     version             bigint NOT NULL

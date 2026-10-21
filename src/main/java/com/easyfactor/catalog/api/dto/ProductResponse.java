@@ -6,8 +6,6 @@ import java.util.UUID;
 import com.easyfactor.catalog.domain.DigitalDeliveryType;
 import com.easyfactor.catalog.domain.Product;
 import com.easyfactor.catalog.domain.ProductStatus;
-import com.easyfactor.shared.domain.CurrencyCode;
-import com.easyfactor.shared.domain.Money;
 
 /**
  * Owner-facing product view including delivery metadata.
@@ -17,8 +15,7 @@ public record ProductResponse(
         UUID ownerId,
         String name,
         String description,
-        Money price,
-        CurrencyCode currency,
+        long priceRials,
         ProductStatus status,
         DigitalDeliveryType deliveryType,
         String deliveryPayload,

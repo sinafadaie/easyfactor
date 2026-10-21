@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.easyfactor.catalog.domain.DigitalDeliveryType;
 import com.easyfactor.catalog.domain.Product;
-import com.easyfactor.shared.domain.Money;
 
 /**
  * Customer-facing product view without secrets (no delivery payload).
@@ -14,7 +13,7 @@ public record PublicProductResponse(
         UUID ownerId,
         String name,
         String description,
-        Money price,
+        long priceRials,
         DigitalDeliveryType deliveryType,
         String imageUrl) {
 

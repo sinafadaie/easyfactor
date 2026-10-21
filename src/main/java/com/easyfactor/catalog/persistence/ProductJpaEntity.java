@@ -1,6 +1,5 @@
 package com.easyfactor.catalog.persistence;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.easyfactor.shared.persistence.AuditableJpaEntity;
@@ -22,11 +21,8 @@ public class ProductJpaEntity extends AuditableJpaEntity {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "price_amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal priceAmount;
-
-    @Column(name = "currency", nullable = false, length = 8)
-    private String currency;
+    @Column(name = "price_rials", nullable = false)
+    private long priceRials;
 
     @Column(name = "status", nullable = false, length = 32)
     private String status;
@@ -64,20 +60,12 @@ public class ProductJpaEntity extends AuditableJpaEntity {
         this.description = description;
     }
 
-    public BigDecimal getPriceAmount() {
-        return priceAmount;
+    public long getPriceRials() {
+        return priceRials;
     }
 
-    public void setPriceAmount(BigDecimal priceAmount) {
-        this.priceAmount = priceAmount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setPriceRials(long priceRials) {
+        this.priceRials = priceRials;
     }
 
     public String getStatus() {

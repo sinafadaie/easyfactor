@@ -28,9 +28,6 @@ public class OwnerJpaEntity extends AuditableJpaEntity {
     @Column(name = "shop_name")
     private String shopName;
 
-    @Column(name = "default_currency", length = 8, nullable = false)
-    private String defaultCurrency;
-
     public Long getTelegramUserId() {
         return telegramUserId;
     }
@@ -77,13 +74,5 @@ public class OwnerJpaEntity extends AuditableJpaEntity {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
-    }
-
-    public String getDefaultCurrency() {
-        return defaultCurrency;
-    }
-
-    public void setDefaultCurrency(String defaultCurrency) {
-        this.defaultCurrency = defaultCurrency;
     }
 }

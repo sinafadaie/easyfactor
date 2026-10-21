@@ -1,0 +1,7 @@
+  1. Flexible product fields (next) — add category, unit, attributes JSONB to the products table, entity, and domain
+  2. Fill catalog TODOs — Product domain methods, persistence mapper, ProductRepositoryAdapter, ProductService, controllers
+  3. Fill invoice TODOs — Invoice lifecycle transitions, mappers, adapter, InvoiceService
+  4. Auth — Telegram init-data verification + AuthService + JWT
+  5. Notifications — invoice events → Telegram messages
+  6. Payments — Telegram Stars (after MVP)
+

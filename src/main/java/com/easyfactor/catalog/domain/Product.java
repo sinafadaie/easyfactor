@@ -3,8 +3,6 @@ package com.easyfactor.catalog.domain;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.Money;
-
 /**
  * Product (catalog offer) aggregate root. Deletion is a soft archive.
  */
@@ -14,7 +12,7 @@ public class Product {
     private final UUID ownerId;
     private String name;
     private String description;
-    private Money price;
+    private long priceRials;
     private ProductStatus status;
     private DigitalDeliveryType deliveryType;
     private String deliveryPayload;
@@ -22,13 +20,13 @@ public class Product {
     private final Instant createdAt;
     private Instant updatedAt;
 
-    public Product(UUID id, UUID ownerId, String name, String description, Money price, ProductStatus status,
+    public Product(UUID id, UUID ownerId, String name, String description, long priceRials, ProductStatus status,
             DigitalDeliveryType deliveryType, String deliveryPayload, String imageUrl, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.priceRials = priceRials;
         this.status = status;
         this.deliveryType = deliveryType;
         this.deliveryPayload = deliveryPayload;
@@ -76,8 +74,8 @@ public class Product {
         return description;
     }
 
-    public Money getPrice() {
-        return price;
+    public long getPriceRials() {
+        return priceRials;
     }
 
     public ProductStatus getStatus() {

@@ -1,6 +1,5 @@
 package com.easyfactor.invoice.persistence;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.easyfactor.shared.persistence.AuditableJpaEntity;
@@ -29,14 +28,11 @@ public class InvoiceItemJpaEntity extends AuditableJpaEntity {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price_amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal unitPriceAmount;
+    @Column(name = "unit_price_rials", nullable = false)
+    private long unitPriceRials;
 
-    @Column(name = "line_total_amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal lineTotalAmount;
-
-    @Column(name = "currency", nullable = false, length = 8)
-    private String currency;
+    @Column(name = "line_total_rials", nullable = false)
+    private long lineTotalRials;
 
     @Column(name = "position", nullable = false)
     private Integer position;
@@ -73,28 +69,20 @@ public class InvoiceItemJpaEntity extends AuditableJpaEntity {
         this.quantity = quantity;
     }
 
-    public BigDecimal getUnitPriceAmount() {
-        return unitPriceAmount;
+    public long getUnitPriceRials() {
+        return unitPriceRials;
     }
 
-    public void setUnitPriceAmount(BigDecimal unitPriceAmount) {
-        this.unitPriceAmount = unitPriceAmount;
+    public void setUnitPriceRials(long unitPriceRials) {
+        this.unitPriceRials = unitPriceRials;
     }
 
-    public BigDecimal getLineTotalAmount() {
-        return lineTotalAmount;
+    public long getLineTotalRials() {
+        return lineTotalRials;
     }
 
-    public void setLineTotalAmount(BigDecimal lineTotalAmount) {
-        this.lineTotalAmount = lineTotalAmount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setLineTotalRials(long lineTotalRials) {
+        this.lineTotalRials = lineTotalRials;
     }
 
     public Integer getPosition() {

@@ -1,6 +1,5 @@
 package com.easyfactor.payment.persistence;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -29,11 +28,8 @@ public class PaymentJpaEntity extends AuditableJpaEntity {
     @Column(name = "telegram_payment_charge_id")
     private String telegramPaymentChargeId;
 
-    @Column(name = "amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal amount;
-
-    @Column(name = "currency", nullable = false, length = 8)
-    private String currency;
+    @Column(name = "amount_rials", nullable = false)
+    private long amountRials;
 
     @Column(name = "raw_payload", columnDefinition = "jsonb")
     private String rawPayload;
@@ -84,20 +80,12 @@ public class PaymentJpaEntity extends AuditableJpaEntity {
         this.telegramPaymentChargeId = telegramPaymentChargeId;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public long getAmountRials() {
+        return amountRials;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setAmountRials(long amountRials) {
+        this.amountRials = amountRials;
     }
 
     public String getRawPayload() {

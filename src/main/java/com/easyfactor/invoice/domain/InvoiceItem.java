@@ -2,8 +2,6 @@ package com.easyfactor.invoice.domain;
 
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.Money;
-
 /**
  * Line item entity inside the Invoice aggregate.
  */
@@ -13,20 +11,20 @@ public class InvoiceItem {
     private final UUID productId;
     private final String description;
     private final int quantity;
-    private final Money unitPrice;
-    private final Money lineTotal;
+    private final long unitPriceRials;
+    private final long lineTotalRials;
 
-    public InvoiceItem(UUID id, UUID productId, String description, int quantity, Money unitPrice, Money lineTotal) {
+    public InvoiceItem(UUID id, UUID productId, String description, int quantity, long unitPriceRials, long lineTotalRials) {
         this.id = id;
         this.productId = productId;
         this.description = description;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.lineTotal = lineTotal;
+        this.unitPriceRials = unitPriceRials;
+        this.lineTotalRials = lineTotalRials;
     }
 
-    public static InvoiceItem create(UUID productId, String description, int quantity, Money unitPrice) {
-        // TODO: lineTotal = unitPrice * quantity
+    public static InvoiceItem create(UUID productId, String description, int quantity, long unitPriceRials) {
+        // TODO: lineTotalRials = unitPriceRials * quantity
         return null;
     }
 
@@ -46,11 +44,11 @@ public class InvoiceItem {
         return quantity;
     }
 
-    public Money getUnitPrice() {
-        return unitPrice;
+    public long getUnitPriceRials() {
+        return unitPriceRials;
     }
 
-    public Money getLineTotal() {
-        return lineTotal;
+    public long getLineTotalRials() {
+        return lineTotalRials;
     }
 }

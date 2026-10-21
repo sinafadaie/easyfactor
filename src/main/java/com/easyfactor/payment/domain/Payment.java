@@ -3,7 +3,6 @@ package com.easyfactor.payment.domain;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.easyfactor.shared.domain.Money;
 import com.easyfactor.shared.domain.PaymentProvider;
 
 /**
@@ -17,14 +16,14 @@ public class Payment {
     private PaymentStatus status;
     private String providerReference;
     private String telegramPaymentChargeId;
-    private final Money amount;
+    private final long amountRials;
     private String rawPayload;
     private String failureReason;
     private final Instant createdAt;
     private Instant completedAt;
 
     public Payment(UUID id, UUID invoiceId, PaymentProvider provider, PaymentStatus status, String providerReference,
-            String telegramPaymentChargeId, Money amount, String rawPayload, String failureReason, Instant createdAt,
+            String telegramPaymentChargeId, long amountRials, String rawPayload, String failureReason, Instant createdAt,
             Instant completedAt) {
         this.id = id;
         this.invoiceId = invoiceId;
@@ -32,14 +31,14 @@ public class Payment {
         this.status = status;
         this.providerReference = providerReference;
         this.telegramPaymentChargeId = telegramPaymentChargeId;
-        this.amount = amount;
+        this.amountRials = amountRials;
         this.rawPayload = rawPayload;
         this.failureReason = failureReason;
         this.createdAt = createdAt;
         this.completedAt = completedAt;
     }
 
-    public static Payment initiate(UUID invoiceId, PaymentProvider provider, Money amount, Instant now) {
+    public static Payment initiate(UUID invoiceId, PaymentProvider provider, long amountRials, Instant now) {
         // TODO
         return null;
     }
@@ -80,8 +79,8 @@ public class Payment {
         return telegramPaymentChargeId;
     }
 
-    public Money getAmount() {
-        return amount;
+    public long getAmountRials() {
+        return amountRials;
     }
 
     public String getRawPayload() {
