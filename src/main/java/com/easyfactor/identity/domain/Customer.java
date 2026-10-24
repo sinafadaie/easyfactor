@@ -6,10 +6,13 @@ import java.util.UUID;
 
 import com.easyfactor.telegram.domain.TelegramUser;
 
+import lombok.Getter;
+
 /**
  * Customer aggregate root. A customer may have no Telegram account
  * (telegramUserId is nullable) — owners can create invoices for phone-based customers too.
  */
+@Getter
 public class Customer {
 
     private final UUID id;
@@ -57,45 +60,5 @@ public class Customer {
 
     public void removeAddress(UUID addressId) {
         // TODO
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Long getTelegramUserId() {
-        return telegramUserId;
-    }
-
-    public String getTelegramUsername() {
-        return telegramUsername;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public String getLanguageCode() {
-        return languageCode;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

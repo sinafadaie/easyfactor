@@ -3,6 +3,9 @@ package com.easyfactor.payment.persistence;
 import java.time.Instant;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.easyfactor.shared.persistence.AuditableJpaEntity;
 
 import jakarta.persistence.Column;
@@ -11,6 +14,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "payments")
+@Getter
+@Setter
 public class PaymentJpaEntity extends AuditableJpaEntity {
 
     @Column(name = "invoice_id", nullable = false)
@@ -28,8 +33,8 @@ public class PaymentJpaEntity extends AuditableJpaEntity {
     @Column(name = "telegram_payment_charge_id")
     private String telegramPaymentChargeId;
 
-    @Column(name = "amount_rials", nullable = false)
-    private long amountRials;
+    @Column(name = "amount", nullable = false)
+    private long amount;
 
     @Column(name = "raw_payload", columnDefinition = "jsonb")
     private String rawPayload;
@@ -39,76 +44,4 @@ public class PaymentJpaEntity extends AuditableJpaEntity {
 
     @Column(name = "completed_at")
     private Instant completedAt;
-
-    public UUID getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(UUID invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getProviderReference() {
-        return providerReference;
-    }
-
-    public void setProviderReference(String providerReference) {
-        this.providerReference = providerReference;
-    }
-
-    public String getTelegramPaymentChargeId() {
-        return telegramPaymentChargeId;
-    }
-
-    public void setTelegramPaymentChargeId(String telegramPaymentChargeId) {
-        this.telegramPaymentChargeId = telegramPaymentChargeId;
-    }
-
-    public long getAmountRials() {
-        return amountRials;
-    }
-
-    public void setAmountRials(long amountRials) {
-        this.amountRials = amountRials;
-    }
-
-    public String getRawPayload() {
-        return rawPayload;
-    }
-
-    public void setRawPayload(String rawPayload) {
-        this.rawPayload = rawPayload;
-    }
-
-    public String getFailureReason() {
-        return failureReason;
-    }
-
-    public void setFailureReason(String failureReason) {
-        this.failureReason = failureReason;
-    }
-
-    public Instant getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(Instant completedAt) {
-        this.completedAt = completedAt;
-    }
 }

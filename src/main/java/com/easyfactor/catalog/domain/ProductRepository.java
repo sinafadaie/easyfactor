@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * Product persistence port (hexagonal boundary).
+ *  we need this interface because of the Dependency Inversion Principle
+ *  It says: the important code must not depend on the infrastructure; instead,
+ *  infrastructure depends on the important code.
  */
 public interface ProductRepository {
 

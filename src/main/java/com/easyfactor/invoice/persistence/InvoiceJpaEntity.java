@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.easyfactor.shared.persistence.AuditableJpaEntity;
 
 import jakarta.persistence.CascadeType;
@@ -18,6 +21,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "invoices")
+@Getter
+@Setter
 public class InvoiceJpaEntity extends AuditableJpaEntity {
 
     @Column(name = "invoice_number", nullable = false, unique = true, length = 64)
@@ -38,8 +43,8 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
     @Column(name = "status", nullable = false, length = 32)
     private String status;
 
-    @Column(name = "total_rials", nullable = false)
-    private long totalRials;
+    @Column(name = "total", nullable = false)
+    private long total;
 
     @Column(name = "payment_provider", nullable = false, length = 32)
     private String paymentProvider;
@@ -62,116 +67,4 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("position ASC")
     private List<InvoiceItemJpaEntity> items = new ArrayList<>();
-
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    public UUID getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(UUID ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public UUID getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(UUID customerId) {
-        this.customerId = customerId;
-    }
-
-    public Long getCustomerTelegramUserId() {
-        return customerTelegramUserId;
-    }
-
-    public void setCustomerTelegramUserId(Long customerTelegramUserId) {
-        this.customerTelegramUserId = customerTelegramUserId;
-    }
-
-    public String getCustomerDisplayName() {
-        return customerDisplayName;
-    }
-
-    public void setCustomerDisplayName(String customerDisplayName) {
-        this.customerDisplayName = customerDisplayName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public long getTotalRials() {
-        return totalRials;
-    }
-
-    public void setTotalRials(long totalRials) {
-        this.totalRials = totalRials;
-    }
-
-    public String getPaymentProvider() {
-        return paymentProvider;
-    }
-
-    public void setPaymentProvider(String paymentProvider) {
-        this.paymentProvider = paymentProvider;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public Instant getSentAt() {
-        return sentAt;
-    }
-
-    public void setSentAt(Instant sentAt) {
-        this.sentAt = sentAt;
-    }
-
-    public Instant getPaidAt() {
-        return paidAt;
-    }
-
-    public void setPaidAt(Instant paidAt) {
-        this.paidAt = paidAt;
-    }
-
-    public String getCancelReason() {
-        return cancelReason;
-    }
-
-    public void setCancelReason(String cancelReason) {
-        this.cancelReason = cancelReason;
-    }
-
-    public List<InvoiceItemJpaEntity> getItems() {
-        return items;
-    }
-
-    public void setItems(List<InvoiceItemJpaEntity> items) {
-        this.items = items;
-    }
 }

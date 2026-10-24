@@ -1,5 +1,6 @@
 package com.easyfactor.catalog.api.dto;
 
+import java.util.Map;
 import java.util.UUID;
 
 import com.easyfactor.catalog.domain.DigitalDeliveryType;
@@ -13,7 +14,10 @@ public record PublicProductResponse(
         UUID ownerId,
         String name,
         String description,
-        long priceRials,
+        String category,
+        String unit,
+        Map<String, Object> attributes,
+        long price,
         DigitalDeliveryType deliveryType,
         String imageUrl) {
 

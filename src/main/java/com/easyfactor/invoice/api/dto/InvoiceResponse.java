@@ -19,7 +19,7 @@ public record InvoiceResponse(
         Long customerTelegramUserId,
         String customerDisplayName,
         List<InvoiceItem> items,
-        long totalRials,
+        long total,
         LocalDate dueDate,
         String notes,
         PaymentProvider paymentProvider,

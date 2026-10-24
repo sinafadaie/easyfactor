@@ -1,18 +1,29 @@
 package com.easyfactor.catalog.domain;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
+import com.easyfactor.shared.error.BusinessException;
+import com.easyfactor.shared.error.ErrorCode;
+
+import lombok.Getter;
+
 /**
- * Product (catalog offer) aggregate root. Deletion is a soft archive.
+ * Product (catalog offer) aggregate root.
+ * Deletion is a soft archive. (to store old invoices!)
  */
+@Getter
 public class Product {
 
     private final UUID id;
     private final UUID ownerId;
     private String name;
     private String description;
-    private long priceRials;
+    private String category;
+    private String unit;
+    private Map<String, Object> attributes;
+    private long price;
     private ProductStatus status;
     private DigitalDeliveryType deliveryType;
     private String deliveryPayload;
@@ -20,13 +31,17 @@ public class Product {
     private final Instant createdAt;
     private Instant updatedAt;
 
-    public Product(UUID id, UUID ownerId, String name, String description, long priceRials, ProductStatus status,
+    public Product(UUID id, UUID ownerId, String name, String description, String category, String unit,
+            Map<String, Object> attributes, long price, ProductStatus status,
             DigitalDeliveryType deliveryType, String deliveryPayload, String imageUrl, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
         this.description = description;
-        this.priceRials = priceRials;
+        this.category = category;
+        this.unit = unit;
+        this.attributes = attributes;
+        this.price = price;
         this.status = status;
         this.deliveryType = deliveryType;
         this.deliveryPayload = deliveryPayload;
@@ -35,70 +50,57 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public static Product create(UUID ownerId, ProductDraft draft, Instant now) {
-        // TODO
-        return null;
+    public static Product create(UUID ownerId, ProductDraft draft, Instant now) {       //it is factory method
+        requireValid(draft);                                                                     //it should be static
+        ProductStatus status = draft.active() ? ProductStatus.ACTIVE : ProductStatus.ARCHIVED;
+
+        return new Product(UUID.randomUUID(), ownerId, draft.name(), draft.description(), draft.category(), draft.unit(),
+                attributesOrEmpty(draft), draft.price(), status, draft.deliveryType(),
+                draft.deliveryPayload(), draft.imageUrl(), now, now);
     }
 
     public void update(ProductDraft draft, Instant now) {
-        // TODO
+        requireValid(draft);
+        this.name = draft.name();
+        this.description = draft.description();
+        this.category = draft.category();
+        this.unit = draft.unit();
+        this.attributes = attributesOrEmpty(draft);
+        this.price = draft.price();
+        this.deliveryType = draft.deliveryType();
+        this.deliveryPayload = draft.deliveryPayload();
+        this.imageUrl = draft.imageUrl();
+        this.status = draft.active() ? ProductStatus.ACTIVE : ProductStatus.ARCHIVED;
+        this.updatedAt = now;
     }
 
     public void archive(Instant now) {
-        // TODO
+        this.status = ProductStatus.ARCHIVED;
+        this.updatedAt = now;
     }
 
     public boolean isActive() {
-        // TODO
-        return false;
+        return status == ProductStatus.ACTIVE;
     }
 
     public boolean belongsTo(UUID ownerId) {
-        // TODO
-        return false;
+        return this.ownerId.equals(ownerId);
     }
 
-    public UUID getId() {
-        return id;
+    private static void requireValid(ProductDraft draft) {
+        if (draft == null || isBlank(draft.name()) || isBlank(draft.category()) || isBlank(draft.unit())) {
+            throw new BusinessException(ErrorCode.VALIDATION_FAILED, "name, category and unit are required");
+        }
+        if (draft.price() <= 0) {
+            throw new BusinessException(ErrorCode.VALIDATION_FAILED, "price must be positive");
+        }
     }
 
-    public UUID getOwnerId() {
-        return ownerId;
+    private static Map<String, Object> attributesOrEmpty(ProductDraft draft) { //to prevent NullPointerException
+        return draft.attributes() == null ? Map.of() : draft.attributes();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public long getPriceRials() {
-        return priceRials;
-    }
-
-    public ProductStatus getStatus() {
-        return status;
-    }
-
-    public DigitalDeliveryType getDeliveryType() {
-        return deliveryType;
-    }
-
-    public String getDeliveryPayload() {
-        return deliveryPayload;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
+    private static boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }

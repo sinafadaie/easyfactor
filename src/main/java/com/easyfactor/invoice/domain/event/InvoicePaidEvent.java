@@ -13,6 +13,6 @@ public record InvoicePaidEvent(
         UUID ownerId,
         UUID customerId,
         Long customerTelegramUserId,
-        long totalRials,
+        long total,
         Instant paidAt) {
 }

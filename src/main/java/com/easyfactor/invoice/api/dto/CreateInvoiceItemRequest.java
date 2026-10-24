@@ -10,5 +10,5 @@ public record CreateInvoiceItemRequest(
         UUID productId,
         @NotBlank @Size(max = 512) String description,
         @Min(1) int quantity,
-        @Min(0) long unitPriceRials) {
+        @Min(0) long unitPrice) {
 }

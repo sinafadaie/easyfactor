@@ -20,6 +20,6 @@ public record InvoiceDraft(
             UUID productId,
             String description,
             int quantity,
-            long unitPriceRials) {
+            long unitPrice) {
     }
 }

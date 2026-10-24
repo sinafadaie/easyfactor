@@ -5,7 +5,7 @@ CREATE TABLE payments (
     status                      varchar(32) NOT NULL,
     provider_reference          varchar(255),
     telegram_payment_charge_id  varchar(255),
-    amount_rials                bigint NOT NULL,
+    amount                bigint NOT NULL,
     raw_payload                 jsonb,
     failure_reason              varchar(512),
     completed_at                timestamptz,

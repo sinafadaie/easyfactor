@@ -5,9 +5,12 @@ import java.util.UUID;
 
 import com.easyfactor.telegram.domain.TelegramUser;
 
+import lombok.Getter;
+
 /**
  * Owner (shop owner) aggregate root.
  */
+@Getter
 public class Owner {
 
     private final UUID id;
@@ -44,41 +47,5 @@ public class Owner {
 
     public void renameShop(String newShopName) {
         // TODO
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Long getTelegramUserId() {
-        return telegramUserId;
-    }
-
-    public String getTelegramUsername() {
-        return telegramUsername;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getLanguageCode() {
-        return languageCode;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

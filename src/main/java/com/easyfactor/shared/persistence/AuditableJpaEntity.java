@@ -3,6 +3,8 @@ package com.easyfactor.shared.persistence;
 import java.time.Instant;
 import java.util.UUID;
 
+import lombok.Getter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 /**
  * Common persistence identity and audit fields for all JPA entities.
  */
+@Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditableJpaEntity {
@@ -38,23 +41,7 @@ public abstract class AuditableJpaEntity {
     @Column(name = "version", nullable = false)
     private long version;
 
-    public UUID getId() {
-        return id;
-    }
-
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public long getVersion() {
-        return version;
     }
 }

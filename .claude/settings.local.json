@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw test *)",
+      "Bash(xargs sed -i '' -e 's/lineTotalRials/lineTotal/g' -e 's/unitPriceRials/unitPrice/g' -e 's/totalRials/total/g' -e 's/priceRials/price/g' -e 's/amountRials/amount/g')",
+      "Bash(sed -i '' -e 's/line_total_rials/line_total/g' -e 's/unit_price_rials/unit_price/g' -e 's/total_rials/total/g' -e 's/price_rials/price/g' -e 's/amount_rials/amount/g' resources/db/migration/V2__create_catalog_tables.sql resources/db/migration/V3__create_invoice_tables.sql resources/db/migration/V4__create_payment_tables.sql)"
+    ]
+  }
+}

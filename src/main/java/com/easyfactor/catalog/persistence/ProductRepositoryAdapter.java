@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.easyfactor.catalog.domain.Product;
 import com.easyfactor.catalog.domain.ProductRepository;
+import com.easyfactor.catalog.domain.ProductStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,37 +27,34 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        // TODO
-        return null;
+        ProductJpaEntity entity = jpaRepository.findById(product.getId())
+                .map(existing -> mapper.applyTo(existing, product))
+                .orElseGet(() -> mapper.toEntity(product));
+        return mapper.toDomain(jpaRepository.save(entity));
     }
 
     @Override
     public Optional<Product> findById(UUID id) {
-        // TODO
-        return Optional.empty();
+        return jpaRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override
     public Optional<Product> findByIdAndOwnerId(UUID id, UUID ownerId) {
-        // TODO
-        return Optional.empty();
+        return jpaRepository.findByIdAndOwnerId(id, ownerId).map(mapper::toDomain);
     }
 
     @Override
     public Page<Product> findByOwnerId(UUID ownerId, Pageable pageable) {
-        // TODO
-        return null;
+        return jpaRepository.findByOwnerId(ownerId, pageable).map(mapper::toDomain);
     }
 
     @Override
     public Page<Product> findActiveByOwnerId(UUID ownerId, Pageable pageable) {
-        // TODO
-        return null;
+        return jpaRepository.findByOwnerIdAndStatus(ownerId, ProductStatus.ACTIVE.name(), pageable).map(mapper::toDomain);
     }
 
     @Override
     public Optional<Product> findActiveById(UUID id) {
-        // TODO
-        return Optional.empty();
+        return jpaRepository.findByIdAndStatus(id, ProductStatus.ACTIVE.name()).map(mapper::toDomain);
     }
 }

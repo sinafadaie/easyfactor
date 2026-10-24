@@ -5,3 +5,13 @@
   5. Notifications — invoice events → Telegram messages
   6. Payments — Telegram Stars (after MVP)
 
+  ├── domain/          ← business rules (pure Java, knows nothing about HTTP or DB)
+  ├── persistence/     ← how products are stored (JPA ↔ PostgreSQL)
+  ├── service/         ← use-case flow (the "glue" between domain and persistence)
+  └── api/             ← HTTP layer (controllers + DTOs)
+
+  why we create our entity on persistence?
+    1. JPA forces you to weaken your class
+    2. Business tests stay fast
+    3. Storage details don't leak into business logic
+    4. You can swap storage without touching rules

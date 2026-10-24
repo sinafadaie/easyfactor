@@ -1,5 +1,8 @@
 package com.easyfactor.identity.persistence;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.easyfactor.shared.persistence.AuditableJpaEntity;
 
 import jakarta.persistence.Column;
@@ -11,6 +14,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
+@Getter
+@Setter
 public class AddressJpaEntity extends AuditableJpaEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -37,68 +42,4 @@ public class AddressJpaEntity extends AuditableJpaEntity {
 
     @Column(name = "country", length = 128)
     private String country;
-
-    public CustomerJpaEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerJpaEntity customer) {
-        this.customer = customer;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getLine1() {
-        return line1;
-    }
-
-    public void setLine1(String line1) {
-        this.line1 = line1;
-    }
-
-    public String getLine2() {
-        return line2;
-    }
-
-    public void setLine2(String line2) {
-        this.line2 = line2;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 }

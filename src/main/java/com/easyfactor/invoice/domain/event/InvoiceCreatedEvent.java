@@ -11,6 +11,6 @@ public record InvoiceCreatedEvent(
         String invoiceNumber,
         UUID ownerId,
         UUID customerId,
-        long totalRials,
+        long total,
         Instant occurredAt) {
 }
