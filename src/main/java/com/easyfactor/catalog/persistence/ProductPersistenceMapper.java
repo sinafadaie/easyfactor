@@ -12,7 +12,15 @@ import org.springframework.stereotype.Component;
 
 /**
  * Maps Product between domain aggregate and JPA entity.
+ *  The mapping is not mechanical.
+ *  This mapper does real work that MapStruct would need custom config for anyway
  */
+
+/*
+this is DB boundary
+it is different from controller classes that we used @Mapper
+*/
+
 @Component
 public class ProductPersistenceMapper {
 
@@ -64,7 +72,9 @@ public class ProductPersistenceMapper {
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")      //@SuppressWarnings("unchecked") tells the Java compiler:
+                                        //"I know about this warning, don't show it to me."
+                                        //The warning source — generic type erasure
     private Map<String, Object> parseAttributes(String json) {
         try {
             return (Map<String, Object>) jsonMapper.readValue(json, Map.class);
