@@ -20,8 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -85,18 +83,6 @@ class ProductRepositoryAdapterTest {
         assertThat(updated.getStatus()).isEqualTo(ProductStatus.ARCHIVED);
         assertThat(repository.findById(saved.getId()))
                 .get().extracting(Product::getStatus).isEqualTo(ProductStatus.ARCHIVED);
-    }
-
-    @Test
-    void findActiveFiltersOutArchived() {
-        repository.save(Product.create(ownerId, draft(true), Instant.now()));
-        repository.save(Product.create(ownerId, draft(false), Instant.now()));
-
-        Page<Product> active = repository.findActiveByOwnerId(ownerId, Pageable.unpaged());
-        Page<Product> all = repository.findByOwnerId(ownerId, Pageable.unpaged());
-
-        assertThat(active.getTotalElements()).isEqualTo(1);
-        assertThat(all.getTotalElements()).isEqualTo(2);
     }
 
     @Test

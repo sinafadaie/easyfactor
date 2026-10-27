@@ -21,8 +21,4 @@ public interface ProductRepository {
     Optional<Product> findByIdAndOwnerId(UUID id, UUID ownerId);
 
     Page<Product> findByOwnerId(UUID ownerId, Pageable pageable);
-
-    Page<Product> findActiveByOwnerId(UUID ownerId, Pageable pageable);
-
-    Optional<Product> findActiveById(UUID id);
 }

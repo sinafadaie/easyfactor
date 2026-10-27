@@ -12,8 +12,4 @@ public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, UU
     Optional<ProductJpaEntity> findByIdAndOwnerId(UUID id, UUID ownerId);
 
     Page<ProductJpaEntity> findByOwnerId(UUID ownerId, Pageable pageable);
-
-    Page<ProductJpaEntity> findByOwnerIdAndStatus(UUID ownerId, String status, Pageable pageable);
-
-    Optional<ProductJpaEntity> findByIdAndStatus(UUID id, String status);
 }

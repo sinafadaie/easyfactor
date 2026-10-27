@@ -10,6 +10,8 @@ import com.easyfactor.catalog.domain.ProductStatus;
 
 /**
  * Owner-facing product view including delivery metadata.
+ * we don't use any mapper!
+ * map them manually
  */
 public record ProductResponse(
         UUID id,
@@ -28,7 +30,20 @@ public record ProductResponse(
         Instant updatedAt) {
 
     public static ProductResponse from(Product product) {
-        // TODO
-        return null;
+        return new ProductResponse(
+                product.getId(),
+                product.getOwnerId(),
+                product.getName(),
+                product.getDescription(),
+                product.getCategory(),
+                product.getUnit(),
+                product.getAttributes(),
+                product.getPrice(),
+                product.getStatus(),
+                product.getDeliveryType(),
+                product.getDeliveryPayload(),
+                product.getImageUrl(),
+                product.getCreatedAt(),
+                product.getUpdatedAt());
     }
 }

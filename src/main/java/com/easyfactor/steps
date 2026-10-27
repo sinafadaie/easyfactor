@@ -1,5 +1,9 @@
   1. Flexible product fields (next) — add category, unit, attributes JSONB to the products table, entity, and domain
   2. Fill catalog TODOs — Product domain methods, persistence mapper, ProductRepositoryAdapter, ProductService, controllers
+          1. Implement shared API helpers (ApiResponse, PageResponse)
+          2. Implement catalog DTO factories
+          3. Implement ProductService use cases
+          4. Wire up controllers
   3. Fill invoice TODOs — Invoice lifecycle transitions, mappers, adapter, InvoiceService
   4. Auth — Telegram init-data verification + AuthService + JWT
   5. Notifications — invoice events → Telegram messages
@@ -15,3 +19,18 @@
     2. Business tests stay fast
     3. Storage details don't leak into business logic
     4. You can swap storage without touching rules
+
+
+  let refine some things, in our application owner has a panel that contain some service like
+  invoice service(creating,deleting and updating invoices),
+  customer service(adding,removing/blocking customer)
+  dispatch service (invoices wait for paying,invoices wait for dispatching,invoices are dispatching(on the road),invoices have been dispatched (arrived))
+  payment service
+  products (add/update/remove)
+  our invoice should contain invoice item detail, paying information, paying status, customer information(phone number,address,first and last name, postal code)
+  after the owner create a invoice, we need a link to send this link to the customer(in this state payment status on invoice is در انتظار پرداخت)
+  (the invoice is in the dispatch wait for payment)
+  customer will pay the invoice, i need a payment gateway
+  (if owner has payment gateway we will use it, customer should pay manually)
+  the invoice will transfer from dispatch waiting to pay , to dispatch waiting for dispatching
+  the site is persian, the paymentgate way will be an Iranian one

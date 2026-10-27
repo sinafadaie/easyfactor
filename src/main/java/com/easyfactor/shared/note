@@ -1,0 +1,11 @@
+  The shared package is the home for cross-cutting concerns — things every feature uses but no feature owns:
+  - shared/api → the response envelopes
+  - shared/error → BusinessException, ErrorCode, the global handler
+  - shared/persistence → AuditableJpaEntity
+  - shared/domain → common domain types
+
+  Our structure is package-by-feature: catalog, invoice, payment, identity each own their code. But ApiResponse is needed by every feature's controllers — catalog returns it,
+  invoice will return it, payment will return it.
+
+  Analogy: in an apartment building, every unit needs electricity and water. The pipes don't come from your neighbor's apartment — they come from the building's shared
+  infrastructure. shared is that infrastructure.

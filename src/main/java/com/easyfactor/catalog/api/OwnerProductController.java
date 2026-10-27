@@ -39,32 +39,32 @@ public class OwnerProductController {
     @PostMapping
     ApiResponse<ProductResponse> create(@AuthenticationPrincipal AuthenticatedUser owner,
             @Valid @RequestBody CreateProductRequest request) {
-        // TODO
-        return null;
+        var product = productService.create(owner.accountId(), request.toDraft());
+        return ApiResponse.ok(ProductResponse.from(product));
     }
 
     @PutMapping("/{productId}")
     ApiResponse<ProductResponse> update(@AuthenticationPrincipal AuthenticatedUser owner,
             @PathVariable UUID productId, @Valid @RequestBody UpdateProductRequest request) {
-        // TODO
-        return null;
+        var product = productService.update(owner.accountId(), productId, request.toDraft());
+        return ApiResponse.ok(ProductResponse.from(product));
     }
 
     @DeleteMapping("/{productId}")
     ApiResponse<Void> archive(@AuthenticationPrincipal AuthenticatedUser owner, @PathVariable UUID productId) {
-        // TODO
-        return null;
+        productService.archive(owner.accountId(), productId);
+        return ApiResponse.ok(null);
     }
 
     @GetMapping
     ApiResponse<PageResponse<ProductResponse>> list(@AuthenticationPrincipal AuthenticatedUser owner, Pageable pageable) {
-        // TODO
-        return null;
+        var page = productService.listOwned(owner.accountId(), pageable).map(ProductResponse::from);
+        return ApiResponse.ok(PageResponse.from(page));
     }
 
     @GetMapping("/{productId}")
     ApiResponse<ProductResponse> get(@AuthenticationPrincipal AuthenticatedUser owner, @PathVariable UUID productId) {
-        // TODO
-        return null;
+        var product = productService.getOwned(owner.accountId(), productId);
+        return ApiResponse.ok(ProductResponse.from(product));
     }
 }

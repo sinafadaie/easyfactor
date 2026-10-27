@@ -3,6 +3,7 @@ package com.easyfactor.catalog.api.dto;
 import java.util.Map;
 
 import com.easyfactor.catalog.domain.DigitalDeliveryType;
+import com.easyfactor.catalog.domain.ProductDraft;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,4 +21,9 @@ public record UpdateProductRequest(
         @Size(max = 4000) String deliveryPayload,
         @Size(max = 2048) String imageUrl,
         boolean active) {
+
+    public ProductDraft toDraft() {
+        return new ProductDraft(name, description, category, unit, attributes,
+                price, deliveryType, deliveryPayload, imageUrl, active);
+    }
 }

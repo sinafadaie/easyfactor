@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.easyfactor.catalog.domain.Product;
 import com.easyfactor.catalog.domain.ProductRepository;
-import com.easyfactor.catalog.domain.ProductStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,13 +47,4 @@ public class ProductRepositoryAdapter implements ProductRepository {
         return jpaRepository.findByOwnerId(ownerId, pageable).map(mapper::toDomain);
     }
 
-    @Override
-    public Page<Product> findActiveByOwnerId(UUID ownerId, Pageable pageable) {
-        return jpaRepository.findByOwnerIdAndStatus(ownerId, ProductStatus.ACTIVE.name(), pageable).map(mapper::toDomain);
-    }
-
-    @Override
-    public Optional<Product> findActiveById(UUID id) {
-        return jpaRepository.findByIdAndStatus(id, ProductStatus.ACTIVE.name()).map(mapper::toDomain);
-    }
 }
