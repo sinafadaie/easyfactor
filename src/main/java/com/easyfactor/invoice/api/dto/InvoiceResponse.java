@@ -1,34 +1,48 @@
 package com.easyfactor.invoice.api.dto;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import com.easyfactor.invoice.domain.Invoice;
 import com.easyfactor.invoice.domain.InvoiceItem;
 import com.easyfactor.invoice.domain.InvoiceStatus;
-import com.easyfactor.shared.domain.PaymentProvider;
 
 public record InvoiceResponse(
         UUID id,
         String invoiceNumber,
         InvoiceStatus status,
         UUID ownerId,
-        UUID customerId,
-        Long customerTelegramUserId,
-        String customerDisplayName,
+        String customerPhoneNumber,
+        String customerFirstName,
+        String customerLastName,
+        String customerAddress,
+        String customerPostalCode,
         List<InvoiceItem> items,
         long total,
-        LocalDate dueDate,
         String notes,
-        PaymentProvider paymentProvider,
-        Instant sentAt,
+        UUID publicToken,
         Instant paidAt,
+        Instant dispatchedAt,
         Instant createdAt) {
 
     public static InvoiceResponse from(Invoice invoice) {
-        // TODO
-        return null;
+        return new InvoiceResponse(
+                invoice.getId(),
+                invoice.getInvoiceNumber(),
+                invoice.getStatus(),
+                invoice.getOwnerId(),
+                invoice.getCustomerPhoneNumber(),
+                invoice.getCustomerFirstName(),
+                invoice.getCustomerLastName(),
+                invoice.getCustomerAddress(),
+                invoice.getCustomerPostalCode(),
+                invoice.getItems(),
+                invoice.getTotal(),
+                invoice.getNotes(),
+                invoice.getPublicToken(),
+                invoice.getPaidAt(),
+                invoice.getDispatchedAt(),
+                invoice.getCreatedAt());
     }
 }

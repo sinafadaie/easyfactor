@@ -3,7 +3,6 @@ package com.easyfactor.payment.service;
 import java.time.Clock;
 
 import com.easyfactor.invoice.domain.Invoice;
-import com.easyfactor.invoice.domain.InvoicePaymentInitiator;
 import com.easyfactor.invoice.domain.InvoiceRepository;
 import com.easyfactor.payment.domain.PaymentRepository;
 
@@ -12,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 /**
  * Payment initiation, pre-checkout validation and idempotent successful-payment handling.
- * Implements the InvoicePaymentInitiator port from the invoice package.
+ * Gateway payments are a post-MVP feature; MVP invoices are paid manually.
  */
 @Service
-public class PaymentService implements InvoicePaymentInitiator {
+public class PaymentService {
 
     private final InvoiceRepository invoiceRepository;
     private final PaymentRepository paymentRepository;
@@ -30,11 +29,6 @@ public class PaymentService implements InvoicePaymentInitiator {
         this.gatewayFactory = gatewayFactory;
         this.eventPublisher = eventPublisher;
         this.clock = clock;
-    }
-
-    @Override
-    public void initiatePayment(Invoice invoice) {
-        // TODO: select gateway, Payment.initiate, gateway.initiate(invoice), mark PENDING_PAYMENT
     }
 
     public PreCheckoutResult handlePreCheckout(String payload, long totalAmount, String currency) {

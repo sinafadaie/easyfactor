@@ -2,6 +2,9 @@ package com.easyfactor.invoice.domain;
 
 import java.util.UUID;
 
+import com.easyfactor.shared.error.BusinessException;
+import com.easyfactor.shared.error.ErrorCode;
+
 import lombok.Getter;
 
 /**
@@ -27,7 +30,9 @@ public class InvoiceItem {
     }
 
     public static InvoiceItem create(UUID productId, String description, int quantity, long unitPrice) {
-        // TODO: lineTotal = unitPrice * quantity
-        return null;
+        if (quantity <= 0) {
+            throw new BusinessException(ErrorCode.VALIDATION_FAILED, "quantity must be positive");
+        }
+        return new InvoiceItem(UUID.randomUUID(), productId, description, quantity, unitPrice, unitPrice * quantity);
     }
 }

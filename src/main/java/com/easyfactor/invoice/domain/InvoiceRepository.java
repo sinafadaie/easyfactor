@@ -1,6 +1,5 @@
 package com.easyfactor.invoice.domain;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,9 +17,9 @@ public interface InvoiceRepository {
 
     Optional<Invoice> findByInvoiceNumber(String invoiceNumber);
 
+    Optional<Invoice> findByPublicToken(UUID publicToken);
+
     Page<Invoice> findByOwnerId(UUID ownerId, Pageable pageable);
 
-    Page<Invoice> findByCustomerId(UUID customerId, Pageable pageable);
-
-    Page<Invoice> findDueForExpiration(LocalDate dueDate, Pageable pageable);
+    Page<Invoice> findByOwnerIdAndStatus(UUID ownerId, InvoiceStatus status, Pageable pageable);
 }

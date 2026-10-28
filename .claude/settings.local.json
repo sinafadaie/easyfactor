@@ -4,7 +4,18 @@
       "Bash(./mvnw test *)",
       "Bash(xargs sed -i '' -e 's/lineTotalRials/lineTotal/g' -e 's/unitPriceRials/unitPrice/g' -e 's/totalRials/total/g' -e 's/priceRials/price/g' -e 's/amountRials/amount/g')",
       "Bash(sed -i '' -e 's/line_total_rials/line_total/g' -e 's/unit_price_rials/unit_price/g' -e 's/total_rials/total/g' -e 's/price_rials/price/g' -e 's/amount_rials/amount/g' resources/db/migration/V2__create_catalog_tables.sql resources/db/migration/V3__create_invoice_tables.sql resources/db/migration/V4__create_payment_tables.sql)",
-      "Bash(./mvnw compile *)"
+      "Bash(./mvnw compile *)",
+      "Bash(mvn -q compile)",
+      "Bash(mvn compile *)",
+      "Bash(java -version)",
+      "Bash(mvn -q help:effective-pom)",
+      "Bash(mvn help:effective-pom)",
+      "Bash(sed -n '120,140p' pom.xml)",
+      "Read(//Users/leila/.m2/repository/org/springframework/boot/spring-boot-dependencies/4.1.1/**)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(mvn -q test)",
+      "Bash(mvn test *)",
+      "Bash(mvn clean *)"
     ]
   }
 }

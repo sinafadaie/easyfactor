@@ -1,81 +1,110 @@
 package com.easyfactor.invoice.service;
 
 import java.time.Clock;
-import java.time.LocalDate;
 import java.util.UUID;
 
-import com.easyfactor.identity.domain.CustomerRepository;
 import com.easyfactor.invoice.domain.Invoice;
 import com.easyfactor.invoice.domain.InvoiceDraft;
 import com.easyfactor.invoice.domain.InvoiceNumberGenerator;
-import com.easyfactor.invoice.domain.InvoicePaymentInitiator;
 import com.easyfactor.invoice.domain.InvoiceRepository;
+import com.easyfactor.invoice.domain.InvoiceStatus;
+import com.easyfactor.invoice.domain.event.InvoiceCreatedEvent;
+import com.easyfactor.invoice.domain.event.InvoicePaidEvent;
+import com.easyfactor.shared.error.BusinessException;
+import com.easyfactor.shared.error.ErrorCode;
+import com.easyfactor.shared.error.NotFoundException;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Create/send/cancel/query invoices (application service / orchestration).
+ * Create/update/pay/dispatch/cancel/query invoices (application service / orchestration).
  */
 @Service
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final CustomerRepository customerRepository;
     private final InvoiceNumberGenerator invoiceNumberGenerator;
-    private final InvoicePaymentInitiator paymentInitiator;
     private final ApplicationEventPublisher eventPublisher;
     private final Clock clock;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, CustomerRepository customerRepository,
-            InvoiceNumberGenerator invoiceNumberGenerator, InvoicePaymentInitiator paymentInitiator,
+    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceNumberGenerator invoiceNumberGenerator,
             ApplicationEventPublisher eventPublisher, Clock clock) {
         this.invoiceRepository = invoiceRepository;
-        this.customerRepository = customerRepository;
         this.invoiceNumberGenerator = invoiceNumberGenerator;
-        this.paymentInitiator = paymentInitiator;
         this.eventPublisher = eventPublisher;
         this.clock = clock;
     }
 
+    @Transactional
     public Invoice createInvoice(UUID ownerId, InvoiceDraft draft) {
-        // TODO: load customer snapshot, generate number, Invoice.create, save, publish InvoiceCreatedEvent
-        return null;
+        String number = invoiceNumberGenerator.nextNumber();
+        Invoice invoice = Invoice.create(UUID.randomUUID(), number, ownerId, draft, clock.instant());
+        invoiceRepository.save(invoice);
+        eventPublisher.publishEvent(new InvoiceCreatedEvent(invoice.getId(), invoice.getInvoiceNumber(), ownerId,
+                invoice.getTotal(), invoice.getCreatedAt()));
+        return invoice;
     }
 
-    public Invoice sendInvoice(UUID ownerId, UUID invoiceId) {
-        // TODO: ownership check, markSent, save, then paymentInitiator.initiatePayment(invoice)
-        return null;
+    @Transactional
+    public Invoice updateInvoice(UUID ownerId, UUID invoiceId, InvoiceDraft draft) {
+        Invoice invoice = getForOwner(ownerId, invoiceId);
+        invoice.update(draft, clock.instant());
+        return invoiceRepository.save(invoice);
     }
 
+    @Transactional
+    public Invoice markPaid(UUID ownerId, UUID invoiceId) {
+        Invoice invoice = getForOwner(ownerId, invoiceId);
+        invoice.markPaid(clock.instant());
+        invoiceRepository.save(invoice);
+        eventPublisher.publishEvent(new InvoicePaidEvent(invoice.getId(), invoice.getInvoiceNumber(), ownerId,
+                invoice.getTotal(), invoice.getPaidAt()));
+        return invoice;
+    }
+
+    @Transactional
+    public Invoice markOnDispatching(UUID ownerId, UUID invoiceId) {
+        Invoice invoice = getForOwner(ownerId, invoiceId);
+        invoice.markOnDispatching(clock.instant());
+        return invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public Invoice markDispatched(UUID ownerId, UUID invoiceId) {
+        Invoice invoice = getForOwner(ownerId, invoiceId);
+        invoice.markDispatched(clock.instant());
+        return invoiceRepository.save(invoice);
+    }
+
+    @Transactional
     public Invoice cancelInvoice(UUID ownerId, UUID invoiceId, String reason) {
-        // TODO
-        return null;
+        Invoice invoice = getForOwner(ownerId, invoiceId);
+        invoice.cancel(reason, clock.instant());
+        return invoiceRepository.save(invoice);
     }
 
     public Invoice getForOwner(UUID ownerId, UUID invoiceId) {
-        // TODO
-        return null;
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new NotFoundException("invoice", invoiceId));
+        if (!invoice.getOwnerId().equals(ownerId)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN);
+        }
+        return invoice;
     }
 
-    public Page<Invoice> listForOwner(UUID ownerId, Pageable pageable) {
-        // TODO
-        return null;
+    public Page<Invoice> listForOwner(UUID ownerId, InvoiceStatus status, Pageable pageable) {
+        if (status == null) {
+            return invoiceRepository.findByOwnerId(ownerId, pageable);
+        }
+        return invoiceRepository.findByOwnerIdAndStatus(ownerId, status, pageable);
     }
 
-    public Page<Invoice> listForCustomer(UUID customerId, Pageable pageable) {
-        // TODO
-        return null;
-    }
-
-    public Invoice getForCustomer(UUID customerId, UUID invoiceId) {
-        // TODO
-        return null;
-    }
-
-    void expireOverdue(LocalDate dueDate) {
-        // TODO: expire SENT/PENDING_PAYMENT invoices past dueDate
+    public Invoice getByPublicToken(UUID publicToken) {
+        return invoiceRepository.findByPublicToken(publicToken)
+                .orElseThrow(() -> new NotFoundException("invoice", publicToken));
     }
 }

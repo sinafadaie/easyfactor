@@ -1,0 +1,33 @@
+ @AuthenticationPrincipal is
+ Spring Security's way of handing your controller the already-verified logged-in user
+ — as a typed object, straight into a method parameter.
+                                                                                                                                                                                     
+  The journey of a request:                                                                                                                                                          
+                                                                                                                                                                                     
+  client sends "Authorization: Bearer <JWT>"                                                                                                                                         
+          ↓                                                                                                                                                                          
+  JwtAuthenticationFilter  →  parses + validates the JWT, builds an AuthenticatedUser                                                                                                
+          ↓                         (accountId, telegramUserId, role, displayName)                                                                                                   
+  SecurityContext  ←  stores it for the duration of the request                                                                                                                      
+          ↓                                                                                                                                                                          
+  controller method receives it via @AuthenticationPrincipal AuthenticatedUser owner
+
+
+
+  So the annotation is just Spring saying:
+  "take the principal out of the SecurityContext and inject it here."
+  Our principal is your AuthenticatedUser record
+  — that's why every owner endpoint can write owner.accountId() and be sure it's the caller's real ID.
+
+  Why it matters: identity comes from the verified token, never from the request body.
+                  Without this pattern, a controller might take an ownerId from JSON — and then any client could
+                  pretend to be any owner.
+                   With @AuthenticationPrincipal, the client only controls the token;
+                   the filter controls who the token says they are.
+
+  The manual equivalent would be:
+
+  AuthenticatedUser owner = (AuthenticatedUser) SecurityContextHolder.getContext()
+          .getAuthentication().getPrincipal();
+
+  — verbose and repeated everywhere; the annotation does that for free.

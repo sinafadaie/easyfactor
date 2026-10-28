@@ -1,0 +1,8 @@
+we have ProductRepository interface on domain that is not extended to "JpaRepository"!
+we have ProductJpaRepository interface on persistence package that is extended to "JpaRepository"
+(so it is our real repo)
+
+
+we have ProductRepositoryAdapter class that connect this to interface,
+by this design we never use our db detail on domain area
+this is dependency inversion!

@@ -1,6 +1,5 @@
 package com.easyfactor.invoice.persistence;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,10 +12,11 @@ public interface InvoiceJpaRepository extends JpaRepository<InvoiceJpaEntity, UU
 
     Optional<InvoiceJpaEntity> findByInvoiceNumber(String invoiceNumber);
 
-    Page<InvoiceJpaEntity> findByOwnerId(UUID ownerId, Pageable pageable);
-
-    Page<InvoiceJpaEntity> findByCustomerId(UUID customerId, Pageable pageable);
+    Optional<InvoiceJpaEntity> findByPublicToken(UUID publicToken);
 
     @EntityGraph(attributePaths = "items")
-    Page<InvoiceJpaEntity> findByStatusInAndDueDateBefore(String[] statuses, LocalDate dueDate, Pageable pageable);
+    Page<InvoiceJpaEntity> findByOwnerId(UUID ownerId, Pageable pageable);
+
+    @EntityGraph(attributePaths = "items")
+    Page<InvoiceJpaEntity> findByOwnerIdAndStatus(UUID ownerId, String status, Pageable pageable);
 }

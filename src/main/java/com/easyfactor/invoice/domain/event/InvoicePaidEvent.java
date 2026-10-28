@@ -4,15 +4,12 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Published when an invoice is paid (Observer pattern).
+ * Published when the owner marks an invoice paid (Observer pattern).
  */
 public record InvoicePaidEvent(
         UUID invoiceId,
-        UUID paymentId,
         String invoiceNumber,
         UUID ownerId,
-        UUID customerId,
-        Long customerTelegramUserId,
         long total,
         Instant paidAt) {
 }

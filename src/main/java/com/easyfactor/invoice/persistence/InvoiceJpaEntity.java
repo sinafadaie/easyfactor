@@ -1,7 +1,6 @@
 package com.easyfactor.invoice.persistence;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,14 +30,20 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
-    @Column(name = "customer_id", nullable = false)
-    private UUID customerId;
+    @Column(name = "customer_phone_number", length = 32)
+    private String customerPhoneNumber;
 
-    @Column(name = "customer_telegram_user_id")
-    private Long customerTelegramUserId;
+    @Column(name = "customer_first_name", length = 255)
+    private String customerFirstName;
 
-    @Column(name = "customer_display_name")
-    private String customerDisplayName;
+    @Column(name = "customer_last_name", length = 255)
+    private String customerLastName;
+
+    @Column(name = "customer_address", length = 512)
+    private String customerAddress;
+
+    @Column(name = "customer_postal_code", length = 32)
+    private String customerPostalCode;
 
     @Column(name = "status", nullable = false, length = 32)
     private String status;
@@ -46,23 +51,20 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {
     @Column(name = "total", nullable = false)
     private long total;
 
-    @Column(name = "payment_provider", nullable = false, length = 32)
-    private String paymentProvider;
-
-    @Column(name = "due_date")
-    private LocalDate dueDate;
-
     @Column(name = "notes", columnDefinition = "text")
     private String notes;
 
-    @Column(name = "sent_at")
-    private Instant sentAt;
+    @Column(name = "public_token", nullable = false, unique = true)
+    private UUID publicToken;
+
+    @Column(name = "cancel_reason", length = 512)
+    private String cancelReason;
 
     @Column(name = "paid_at")
     private Instant paidAt;
 
-    @Column(name = "cancel_reason", length = 512)
-    private String cancelReason;
+    @Column(name = "dispatched_at")
+    private Instant dispatchedAt;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("position ASC")
