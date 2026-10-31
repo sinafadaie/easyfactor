@@ -14,7 +14,12 @@ public record UserProfileResponse(
         String shopName) {
 
     public static UserProfileResponse from(UserProfile profile) {
-        // TODO
-        return null;
+        return new UserProfileResponse(
+                profile.id(),
+                profile.telegramUserId(),
+                profile.role(),
+                profile.displayName(),
+                profile.username(),
+                profile.shopName());
     }
 }

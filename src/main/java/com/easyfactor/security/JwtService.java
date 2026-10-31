@@ -2,8 +2,10 @@ package com.easyfactor.security;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.UUID;
 
 import com.easyfactor.config.JwtProperties;
+import com.easyfactor.identity.domain.UserRole;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -27,7 +29,7 @@ public class JwtService {
         this.clock = clock;
     }
 
-    public IssuedToken issue(AuthenticatedUser user) {
+    public IssuedToken issue(AuthenticatedUser user) {          //create token for AuthenticatedUser!
         Instant now = clock.instant();
         Instant expiresAt = now.plus(properties.accessTokenTtl());
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -37,6 +39,7 @@ public class JwtService {
                 .expiresAt(expiresAt)
                 .claim("telegramUserId", user.telegramUserId())
                 .claim("role", user.role().name())
+                .claim("displayName", user.displayName())
                 .build();
         String value = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
         return new IssuedToken(value, expiresAt);
@@ -44,7 +47,11 @@ public class JwtService {
 
     public AuthenticatedUser parse(String token) {
         Jwt jwt = jwtDecoder.decode(token);
-        // TODO: map claims back to AuthenticatedUser (subject, telegramUserId, role, displayName)
-        return null;
+        UUID accountId = UUID.fromString(jwt.getSubject());
+        String telegramUserIdClaim = jwt.getClaimAsString("telegramUserId");
+        Long telegramUserId = telegramUserIdClaim == null ? null : Long.valueOf(telegramUserIdClaim);
+        UserRole role = UserRole.valueOf(jwt.getClaimAsString("role"));
+        String displayName = jwt.getClaimAsString("displayName");
+        return new AuthenticatedUser(accountId, telegramUserId, role, displayName);
     }
 }

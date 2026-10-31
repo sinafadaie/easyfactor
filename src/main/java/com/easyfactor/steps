@@ -9,7 +9,11 @@
           2. Rework invoice persistence
           3. Implement InvoiceService use cases
           4. Wire up invoice controllers + DTOs (owner CRUD + public link endpoint)
-  4. Auth — Telegram init-data verification + AuthService + JWT
+  4. [DONE] Auth — Telegram init-data verification + AuthService + JWT
+          1. Implement Telegram init-data verification (HMAC, auth_date freshness)
+          2. Implement owner identity persistence (Owner domain + mapper + adapter)
+          3. Wire JWT parse + JwtAuthenticationFilter
+          4. Implement AuthService + auth endpoints (owner login + /me; customer login dropped for MVP)
   5. Notifications — invoice events → Telegram messages
   6. Payments — Telegram Stars (after MVP)
 

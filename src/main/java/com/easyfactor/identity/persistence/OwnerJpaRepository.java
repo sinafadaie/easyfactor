@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OwnerJpaRepository extends JpaRepository<OwnerJpaEntity, UUID> {
 
     Optional<OwnerJpaEntity> findByTelegramUserId(Long telegramUserId);
+
+    boolean existsByTelegramUserId(Long telegramUserId);
 }

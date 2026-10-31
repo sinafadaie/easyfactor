@@ -24,25 +24,24 @@ public class OwnerRepositoryAdapter implements OwnerRepository {
 
     @Override
     public Optional<Owner> findById(UUID id) {
-        // TODO
-        return Optional.empty();
+        return jpaRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override
     public Optional<Owner> findByTelegramUserId(Long telegramUserId) {
-        // TODO
-        return Optional.empty();
+        return jpaRepository.findByTelegramUserId(telegramUserId).map(mapper::toDomain);
     }
 
     @Override
     public Owner save(Owner owner) {
-        // TODO
-        return null;
+        OwnerJpaEntity entity = jpaRepository.findById(owner.getId())
+                .map(existing -> mapper.applyTo(existing, owner))
+                .orElseGet(() -> mapper.toEntity(owner));
+        return mapper.toDomain(jpaRepository.save(entity));
     }
 
     @Override
     public boolean existsByTelegramUserId(Long telegramUserId) {
-        // TODO
-        return false;
+        return jpaRepository.existsByTelegramUserId(telegramUserId);
     }
 }

@@ -37,15 +37,20 @@ public class Owner {
     }
 
     public static Owner register(TelegramUser user, Instant now) {
-        // TODO
-        return null;
+        return new Owner(UUID.randomUUID(), user.id(), user.username(), user.firstName(), user.lastName(),
+                user.languageCode(), null, now, now);
     }
 
-    public void updateProfile(TelegramUser user) {
-        // TODO
+    public void updateProfile(TelegramUser user, Instant now) {
+        this.telegramUsername = user.username();
+        this.firstName = user.firstName();
+        this.lastName = user.lastName();
+        this.languageCode = user.languageCode();
+        this.updatedAt = now;
     }
 
-    public void renameShop(String newShopName) {
-        // TODO
+    public void renameShop(String newShopName, Instant now) {
+        this.shopName = newShopName;
+        this.updatedAt = now;
     }
 }

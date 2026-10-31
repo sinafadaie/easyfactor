@@ -12,13 +12,31 @@ import org.springframework.stereotype.Component;
 public class IdentityPersistenceMapper {
 
     public Owner toDomain(OwnerJpaEntity entity) {
-        // TODO
-        return null;
+        return new Owner(
+                entity.getId(),
+                entity.getTelegramUserId(),
+                entity.getTelegramUsername(),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getLanguageCode(),
+                entity.getShopName(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt());
     }
 
     public OwnerJpaEntity toEntity(Owner domain) {
-        // TODO
-        return null;
+        return applyTo(new OwnerJpaEntity(), domain);
+    }
+
+    public OwnerJpaEntity applyTo(OwnerJpaEntity entity, Owner domain) {
+        entity.setId(domain.getId());
+        entity.setTelegramUserId(domain.getTelegramUserId());
+        entity.setTelegramUsername(domain.getTelegramUsername());
+        entity.setFirstName(domain.getFirstName());
+        entity.setLastName(domain.getLastName());
+        entity.setLanguageCode(domain.getLanguageCode());
+        entity.setShopName(domain.getShopName());
+        return entity;
     }
 
     public Customer toDomain(CustomerJpaEntity entity) {

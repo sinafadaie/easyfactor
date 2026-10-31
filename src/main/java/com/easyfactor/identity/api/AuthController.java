@@ -28,19 +28,12 @@ public class AuthController {
 
     @PostMapping("/telegram/owner")
     ApiResponse<AuthResponse> ownerLogin(@Valid @RequestBody TelegramAuthRequest request) {
-        // TODO: authService.authenticateOwner(request.initData())
-        return null;
-    }
-
-    @PostMapping("/telegram/customer")
-    ApiResponse<AuthResponse> customerLogin(@Valid @RequestBody TelegramAuthRequest request) {
-        // TODO: authService.authenticateCustomer(request.initData())
-        return null;
+        var session = authService.authenticateOwner(request.initData());
+        return ApiResponse.ok(AuthResponse.from(session));
     }
 
     @GetMapping("/me")
     ApiResponse<UserProfileResponse> me(@AuthenticationPrincipal AuthenticatedUser user) {
-        // TODO: authService.getProfile(user)
-        return null;
+        return ApiResponse.ok(UserProfileResponse.from(authService.getProfile(user)));
     }
 }
