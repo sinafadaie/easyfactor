@@ -1,0 +1,7 @@
+The identity package is the home of "who is using the app"
+accounts and login. Everything about the person lives here;
+
+security holds the JWT mechanics (issue/parse/filter, AuthenticatedUser)
+technology for carrying identity around.
+identity uses it but doesn't own it.
+Split like this because tokens aren't about people specifically — any feature could need them.

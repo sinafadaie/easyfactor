@@ -14,13 +14,23 @@
           2. Implement owner identity persistence (Owner domain + mapper + adapter)
           3. Wire JWT parse + JwtAuthenticationFilter
           4. Implement AuthService + auth endpoints (owner login + /me; customer login dropped for MVP)
-  5. Notifications — invoice events → Telegram messages
-  6. Payments — Telegram Stars (after MVP)
+  5. [AFTER MVP] Notifications — invoice events → Telegram messages
+  6. [AFTER MVP] Payments — Telegram Stars
+  7. [DONE] Payment cards — owner card numbers (add/remove) shown on invoices
+          1. PaymentCard domain + persistence + V5 migration (16-digit validation/normalization)
+          2. Implement PaymentCardService (add/list/delete with ownership guard)
+          3. Wire payment card endpoints + DTOs (owner CRUD + public list for the invoice page)
+          4. Compile, test, verify (PaymentCardTest)
+
+--------------------
+Code Design:
 
   ├── domain/          ← business rules (pure Java, knows nothing about HTTP or DB)
   ├── persistence/     ← how products are stored (JPA ↔ PostgreSQL)
   ├── service/         ← use-case flow (the "glue" between domain and persistence)
   └── api/             ← HTTP layer (controllers + DTOs)
+
+--------------------
 
   why we create our entity on persistence?
     1. JPA forces you to weaken your class
