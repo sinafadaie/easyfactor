@@ -1,0 +1,20 @@
+The risk is that your app currently has two different filters handling Bearer JWTs:
+
+your custom JwtAuthenticationFilter, which puts an AuthenticatedUser into the SecurityContext
+Spring Security’s built-in BearerTokenAuthenticationFilter, which usually puts a Jwt into the SecurityContext
+If Spring’s built-in filter runs after your custom filter, it may overwrite the authentication you set.
+
+Then controller methods like:
+
+java
+Run Code
+
+Copy code
+@AuthenticationPrincipal AuthenticatedUser user
+
+
+may fail, because the actual principal is a Jwt, not an AuthenticatedUser.
+
+The problem is not proven yet because no test currently sends a real authenticated HTTP request.
+
+So everything may look fine in code, but the first real frontend call to a protected endpoint could break.

@@ -2,12 +2,13 @@ package com.easyfactor.config;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.crypto.spec.SecretKeySpec;
+
 import com.easyfactor.security.JwtAuthenticationFilter;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -37,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/owner/**").hasRole("OWNER")
                         .requestMatchers("/api/v1/customer/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -52,6 +54,6 @@ public class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder(JwtProperties properties) {
         byte[] secret = properties.secret().getBytes(StandardCharsets.UTF_8);
-        return NimbusJwtDecoder.withJwkSource(new ImmutableSecret<>(secret)).build();
+        return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(secret, "HmacSHA256")).build();
     }
 }

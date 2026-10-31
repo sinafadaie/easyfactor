@@ -15,7 +15,18 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(mvn -q test)",
       "Bash(mvn test *)",
-      "Bash(mvn clean *)"
+      "Bash(mvn clean *)",
+      "Bash(unzip -l ~/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar)",
+      "Read(//private/tmp/**)",
+      "Bash(unzip -o -q ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar org/springframework/security/oauth2/jose/jws/SignatureAlgorithm.class org/springframework/security/oauth2/jose/jws/JwsAlgorithms.class)",
+      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.SignatureAlgorithm)",
+      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.JwsAlgorithms)",
+      "Bash(unzip -o -q ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar 'org/springframework/security/oauth2/jwt/JwsHeader*')",
+      "Bash(javap -cp . 'org.springframework.security.oauth2.jwt.JwsHeader$Builder')",
+      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.JwsAlgorithm)",
+      "Bash(unzip -l ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar)",
+      "Bash(unzip -o -q ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar 'org/springframework/security/oauth2/jose/*.class')",
+      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.MacAlgorithm)"
     ]
   }
 }
