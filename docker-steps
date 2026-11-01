@@ -1,0 +1,34 @@
+1.create docker-compose.yml file
+  this is a docker config file, it is a handwritten recipe
+  we set all images that our application need here.
+
+  we will write any images we want under the "SERVICES"
+  each image has some properties like port, container_name, volume,...
+  (a volume is Docker-managed disk storage that survives container restarts. This is where your tables live.)
+
+2."docker compose up -d"                                                 -d = detached (runs in background). First run pulls/uses the image; you'll see "Container easyfactor-postgres Started".
+  this command will read our docker-compose.yaml
+  and create everything it described.
+
+Note: we have the image locally,
+      but if we don't have it, this command will download it automatically,
+      this images will placed in Docker's own storage (inside the Docker Desktop VM's disk on macOS).
+      Your docker-compose.yml only names the image; the bytes live in
+      Docker's library. docker images lists what's cached locally.
+
+Note: we can download it manually by "docker pull postgres:17"
+
+3.check the container work properly
+  "docker compose ps"               NAME                  IMAGE         COMMAND                  SERVICE    CREATED         STATUS         PORTS
+                                    easyfactor-postgres   postgres:17   "docker-entrypoint.s…"   postgres   9 minutes ago   Up 9 minutes   0.0.0.0:5432->5432/tcp
+
+4.Check Postgres inside the container is ready
+  "docker exec easyfactor-postgres pg_isready -U postgres"
+                                            /var/run/postgresql:5432 - accepting connections
+
+Note: this command will execute inside the container,
+      so it will execute on postgres
+
+Note: "pg_isready -U postgres" is postgres command,
+      it will check PostGres is ready or not!
+      -U postgres means this command will execute by postgres user

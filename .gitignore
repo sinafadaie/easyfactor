@@ -33,3 +33,5 @@ build/
 .vscode/
 
 mvnw.cmd
+# local secrets (docker compose interpolation)
+.env

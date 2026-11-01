@@ -26,7 +26,8 @@
       "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.JwsAlgorithm)",
       "Bash(unzip -l ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar)",
       "Bash(unzip -o -q ~/.m2/repository/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.jar 'org/springframework/security/oauth2/jose/*.class')",
-      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.MacAlgorithm)"
+      "Bash(javap -cp . org.springframework.security.oauth2.jose.jws.MacAlgorithm)",
+      "Bash(docker exec *)"
     ]
   }
 }

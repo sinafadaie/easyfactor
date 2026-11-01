@@ -1,0 +1,16 @@
+
+services:                                   # "I want these containers"
+  postgres:                                 # one named postgres
+    image: postgres:17                      # built from this image
+    container_name: easyfactor-postgres
+    environment:                                           # with these startup settings
+      POSTGRES_DB: ${POSTGRES_DB:-easyfactor}              # override via .env file or shell env
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}            # if there is not any DB,
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}.   # docker will create DB by this username/password
+    ports:
+      - "5432:5432"
+    volumes:                                # data stored here
+      - easyfactor_pgdata:/var/lib/postgresql/data
+
+volumes:
+  easyfactor_pgdata:
