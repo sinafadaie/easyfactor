@@ -31,9 +31,8 @@ Code Design:
   └── api/             ← HTTP layer (controllers + DTOs)
 
 --------------------
-
-  why we create our entity on persistence?
-    1. JPA forces you to weaken your class
-    2. Business tests stay fast
-    3. Storage details don't leak into business logic
-    4. You can swap storage without touching rules
+why we create our entity on persistence?
+1. JPA forces you to weaken your class
+2. Business tests stay fast
+3. Storage details don't leak into business logic
+4. You can swap storage without touching rules

@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Claude Code ###
+.claude/
+
 mvnw.cmd
 # local secrets (docker compose interpolation)
 .env
