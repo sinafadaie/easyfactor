@@ -4,7 +4,7 @@ Invoicing Telegram Mini App. Owner panel for managing products, invoices, and pa
 
 ## Backend
 
-Spring Boot (Java) REST API. All endpoints are under `/api/v1` and return a standard `ApiResponse` envelope.
+Spring Boot (Java) REST API. All endpoints are under `/api/v1` and return a standard `ApiResponse` envelope. Endpoint paths are relative to each section's base path — `/` means the base path itself.
 
 ### Auth — `/api/v1/auth`
 
@@ -17,23 +17,23 @@ Spring Boot (Java) REST API. All endpoints are under `/api/v1` and return a stan
 
 | Method | Endpoint | Auth | Summary |
 |---|---|---|---|
-| POST | `` | JWT (OWNER) | Create a new product |
+| POST | `/` | JWT (OWNER) | Create a new product |
 | PUT | `/{productId}` | JWT (OWNER) | Update a product |
 | DELETE | `/{productId}` | JWT (OWNER) | Archive a product (soft delete) |
-| GET | `` | JWT (OWNER) | Paged list of owner's products |
+| GET | `/` | JWT (OWNER) | Paged list of owner's products |
 | GET | `/{productId}` | JWT (OWNER) | Get a single product |
 
 ### Owner invoices — `/api/v1/owner/invoices`
 
 | Method | Endpoint | Auth | Summary |
 |---|---|---|---|
-| POST | `` | JWT (OWNER) | Create an invoice |
+| POST | `/` | JWT (OWNER) | Create an invoice |
 | PUT | `/{invoiceId}` | JWT (OWNER) | Update an invoice |
 | POST | `/{invoiceId}/paid` | JWT (OWNER) | Move status → PAID |
 | POST | `/{invoiceId}/dispatching` | JWT (OWNER) | Move status → DISPATCHING |
 | POST | `/{invoiceId}/dispatched` | JWT (OWNER) | Move status → DISPATCHED |
 | POST | `/{invoiceId}/cancel?reason=` | JWT (OWNER) | Cancel an invoice with a reason |
-| GET | `` | JWT (OWNER) | Paged list, optional `?status=` filter |
+| GET | `/` | JWT (OWNER) | Paged list, optional `?status=` filter |
 | GET | `/{invoiceId}` | JWT (OWNER) | Get a single invoice |
 
 Status transitions are `POST` actions, not `PUT` replacements.
@@ -42,8 +42,8 @@ Status transitions are `POST` actions, not `PUT` replacements.
 
 | Method | Endpoint | Auth | Summary |
 |---|---|---|---|
-| POST | `` | JWT (OWNER) | Add a payment card (number + bank name) |
-| GET | `` | JWT (OWNER) | List owner's cards |
+| POST | `/` | JWT (OWNER) | Add a payment card (number + bank name) |
+| GET | `/` | JWT (OWNER) | List owner's cards |
 | DELETE | `/{cardId}` | JWT (OWNER) | Delete a card |
 
 ### Public (no auth)
