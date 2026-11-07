@@ -37,11 +37,11 @@ public class OwnerProductController {
     }
 
     @PostMapping
-    ApiResponse<ProductResponse> create(@AuthenticationPrincipal AuthenticatedUser owner,
-            @Valid @RequestBody CreateProductRequest request) {
-        var product = productService.create(owner.accountId(), request.toDraft());
-        return ApiResponse.ok(ProductResponse.from(product));
-    }
+    ApiResponse<ProductResponse> create(@AuthenticationPrincipal AuthenticatedUser owner,       //Spring MVC's AuthenticationPrincipalArgumentResolve will inject
+            @Valid @RequestBody CreateProductRequest request) {                                 //AuthenticatedUser obj (it is not Bean)
+        var product = productService.create(owner.accountId(), request.toDraft());                       //Each HTTP request runs on its own thread, so each request has its own context
+        return ApiResponse.ok(ProductResponse.from(product));                                           //The security context lives in a ThreadLocal (SecurityContextHolder).
+    }                                                                                                   //That's why a controller method can have no idea how authentication happened!
 
     @PutMapping("/{productId}")
     ApiResponse<ProductResponse> update(@AuthenticationPrincipal AuthenticatedUser owner,

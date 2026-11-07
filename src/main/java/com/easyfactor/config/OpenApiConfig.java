@@ -1,5 +1,6 @@
 package com.easyfactor.config;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -11,7 +12,9 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @OpenAPIDefinition(info = @Info(
         title = "EasyFactor API",
         version = "0.1.0",
-        description = "Backend for the EasyFactor Telegram Mini App: catalog browsing, manual invoicing and in-Telegram payments."))
+        description = "Backend for the EasyFactor Telegram Mini App: catalog browsing, manual invoicing and in-Telegram payments."),
+        security = @SecurityRequirement(name = "bearerAuth"))   //swagger need this line to add token on curl
+
 @SecurityScheme(                            //this is added for swagger
         name = "bearerAuth",                //it is enabled "Authorize" part on swagger
         type = SecuritySchemeType.HTTP,     //so we can paste our token and login
