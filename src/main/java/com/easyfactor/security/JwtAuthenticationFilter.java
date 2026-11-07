@@ -33,9 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractBearerToken(request);
         if (token != null) {
             try {
-                AuthenticatedUser user = jwtService.parse(token);
+                AuthenticatedUser user = jwtService.parse(token);   //if token is not correct, we have exception here
+
                 var authentication = new UsernamePasswordAuthenticationToken(user, token, List.of(user.authority()));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);   //each user come on separate thread
+                                                                                        //the filter add the AuthenticatedUser obj on security contex
+                                                                                        //we use @AuthenticationPrincipal on controllers
+                                                                                        //so spring will inject AuthenticatedUser obj based on current thread
             } catch (JwtException | IllegalArgumentException e) {
                 // invalid token: leave the request unauthenticated; endpoints that
                 // require a role will reject it with 401/403
