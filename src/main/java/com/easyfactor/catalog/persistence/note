@@ -6,3 +6,26 @@ we have ProductJpaRepository interface on persistence package that is extended t
 we have ProductRepositoryAdapter class that connect this to interface,
 by this design we never use our db detail on domain area
 this is dependency inversion!
+
+
+HEXAGONAL ARCHITECTURE
+This is "Hexagonal Architecture"
+the domain declares what it needs
+("give me invoices by public token", "give me the next number") without knowing how
+
+It is called:
+Ports and Adapters
+
+Port
+An interface defined by the domain.
+
+Adapter
+The concrete implementation of that interface.
+
+Note: It is called Hexagonal Architecture because of the diagram shape,
+      not because the system must have exactly six parts.
+      the core application/domain is in the center
+      it can connect to the outside world from multiple sides
+      those connections happen through ports
+      the external tools are adapters
+      So “hexagonal” is mostly a visual metaphor for a system with a central core and multiple external connections.

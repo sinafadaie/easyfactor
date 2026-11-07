@@ -10,7 +10,7 @@ import java.util.UUID;
  * One class announces an event, other classes can react to it.
  * So InvoiceService just says:
  * invoice created/invoice paid
- * and does not directly call Telegram or SMS.
+ * and does not directly call Telegram or SMS. (we have not any listener now!)
  * This keeps code decoupled and makes new listeners easy to add later.
  * otherwise we need to add them directly on invoice service!
  */

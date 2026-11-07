@@ -25,10 +25,13 @@
 --------------------
 Code Design:
 
-  ├── domain/          ← business rules (pure Java, knows nothing about HTTP or DB)
-  ├── persistence/     ← how products are stored (JPA ↔ PostgreSQL)
-  ├── service/         ← use-case flow (the "glue" between domain and persistence)
-  └── api/             ← HTTP layer (controllers + DTOs)
+  Each business feature is a package with the same 4-layer recipe inside:
+
+  feature/
+  ├── api/          → Controllers (HTTP in) + dto/ (request/response shapes)
+  ├── service/      → Business logic (the "what happens" rules)
+  ├── domain/       → Entities & value objects (the data + invariants)
+  └── persistence/  → Spring Data repositories (how data is saved/loaded)
 
 --------------------
 why we create our entity on persistence?
@@ -36,3 +39,30 @@ why we create our entity on persistence?
 2. Business tests stay fast
 3. Storage details don't leak into business logic
 4. You can swap storage without touching rules
+
+---------------------
+request Journey:
+
+  1. HTTP arrives
+     ↓
+  2. JwtAuthenticationFilter (security/)        ← reads Authorization header,
+                                                   verifies signature, builds AuthenticatedUser,
+                                                   puts it in SecurityContext
+     ↓
+  3. Spring Security checks role                ← "/api/v1/owner/**" requires ROLE_OWNER
+                                                   (SecurityConfig.java:39)
+     ↓
+  4. OwnerInvoiceController.markPaid()          ← extracts invoiceId, calls service
+     ↓
+  5. InvoiceService.markPaid()                  ← THE business rules live here:
+                                                   load invoice → check it belongs to this
+                                                   owner → check status transition is legal
+                                                   → change status → save
+     ↓
+  6. InvoiceRepository (persistence/)           ← Spring Data: you write only the interface,
+                                                   Spring generates the SQL queries
+     ↓
+  7. PostgreSQL                                  ← schema managed by Flyway migrations
+                                                   (resources/db/migration/V*.sql)
+     ↓
+  8. Response bubbles back up wrapped in ApiResponse  ← your standard JSON envelope
