@@ -12,7 +12,9 @@ import com.easyfactor.shared.api.PageResponse;
 
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,8 +59,12 @@ public class OwnerProductController {
     }
 
     @GetMapping
-    ApiResponse<PageResponse<ProductResponse>> list(@AuthenticationPrincipal AuthenticatedUser owner, Pageable pageable) {
-        var page = productService.listOwned(owner.accountId(), pageable).map(ProductResponse::from);
+    ApiResponse<PageResponse<ProductResponse>> list(@AuthenticationPrincipal AuthenticatedUser owner, Pageable pageable) {  //we can send query parameter
+        Pageable withDefaultSort = PageRequest.of(                                                                                           //on every end point that consume pageable obj
+                pageable.getPageNumber(),                                                                                                    //spring MVC handle it
+                pageable.getPageSize(),
+                pageable.getSortOr(Sort.by(Sort.Direction.DESC, "createdAt")));
+        var page = productService.listOwned(owner.accountId(), withDefaultSort).map(ProductResponse::from);
         return ApiResponse.ok(PageResponse.from(page));
     }
 
