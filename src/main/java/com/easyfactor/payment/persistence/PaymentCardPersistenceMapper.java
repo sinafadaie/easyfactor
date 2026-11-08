@@ -21,7 +21,9 @@ public class PaymentCardPersistenceMapper {
 
     public PaymentCardJpaEntity toEntity(PaymentCard domain) {
         PaymentCardJpaEntity entity = new PaymentCardJpaEntity();
-        entity.setId(domain.getId());
+        //entity.setId(domain.getId());       //create bug
+                                              //Hibernate see id is not null so he thinks it's a old record
+                                              //so he uses merge instead of persist and we get .StaleObjectStateException
         entity.setOwnerId(domain.getOwnerId());
         entity.setCardNumber(domain.getCardNumber());
         entity.setBankName(domain.getBankName());
