@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 @Table(name = "invoices")
 @Getter
 @Setter
-public class InvoiceJpaEntity extends AuditableJpaEntity {
+public class InvoiceJpaEntity extends AuditableJpaEntity {  //the id, createdAt, updatedAt, version come from AuditableJpaEntity
 
     @Column(name = "invoice_number", nullable = false, unique = true, length = 64)
     private String invoiceNumber;

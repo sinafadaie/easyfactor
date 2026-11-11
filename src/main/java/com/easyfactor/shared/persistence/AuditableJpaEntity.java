@@ -26,7 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class AuditableJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    //@GeneratedValue(strategy = GenerationType.UUID)   //id generated on app level
     private UUID id;
 
     @CreatedDate
@@ -39,7 +39,8 @@ public abstract class AuditableJpaEntity {
 
     @Version
     @Column(name = "version", nullable = false)
-    private long version;
+    private Long version;   //long initiate by 0,
+                            //so spring data and hibernate consider it as old obj
 
     public void setId(UUID id) {
         this.id = id;

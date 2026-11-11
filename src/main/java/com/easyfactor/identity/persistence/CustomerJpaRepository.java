@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CustomerJpaRepository extends JpaRepository<CustomerJpaEntity, UUID> {
 
     Optional<CustomerJpaEntity> findByTelegramUserId(Long telegramUserId);
+
+    Optional<CustomerJpaEntity> findByOwnerIdAndPhoneNumber(UUID ownerId, String phoneNumber);
 }

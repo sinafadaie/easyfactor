@@ -6,6 +6,8 @@ import com.easyfactor.invoice.domain.InvoiceStatus;
 
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 /**
  * Maps Invoice/InvoiceItem between domain aggregates and JPA entities.
  */
@@ -22,7 +24,7 @@ public class InvoicePersistenceMapper {
                 entity.getCustomerLastName(),
                 entity.getCustomerAddress(),
                 entity.getCustomerPostalCode(),
-                entity.getItems().stream().map(this::toDomainItem).toList(),
+                entity.getItems().stream().map(this::toDomainItem).toList(),    //to list return immutable list, so we can not add any new item in future!
                 entity.getTotal(),
                 entity.getNotes(),
                 InvoiceStatus.valueOf(entity.getStatus()),
@@ -35,7 +37,9 @@ public class InvoicePersistenceMapper {
     }
 
     public InvoiceJpaEntity toEntity(Invoice domain) {
-        return applyTo(new InvoiceJpaEntity(), domain);
+        InvoiceJpaEntity entity = applyTo(new InvoiceJpaEntity(), domain);
+        entity.setId(domain.getId());
+        return entity;
     }
 
     /**
@@ -43,7 +47,7 @@ public class InvoicePersistenceMapper {
      * existing row and its items collection (orphanRemoval drops removed lines).
      */
     public InvoiceJpaEntity applyTo(InvoiceJpaEntity entity, Invoice domain) {
-        entity.setId(domain.getId());
+        //entity.setId(domain.getId());                         //applyTo should be id free
         entity.setInvoiceNumber(domain.getInvoiceNumber());
         entity.setOwnerId(domain.getOwnerId());
         entity.setCustomerPhoneNumber(domain.getCustomerPhoneNumber());
@@ -58,9 +62,9 @@ public class InvoicePersistenceMapper {
         entity.setCancelReason(domain.getCancelReason());
         entity.setPaidAt(domain.getPaidAt());
         entity.setDispatchedAt(domain.getDispatchedAt());
-        entity.getItems().clear();
-        for (int i = 0; i < domain.getItems().size(); i++) {
-            entity.getItems().add(toEntityItem(domain.getItems().get(i), entity, i));
+        entity.getItems().clear();                                                      //we should use old collection
+        for (int i = 0; i < domain.getItems().size(); i++) {                            //if replaces the persistent collection on a managed entity by new one—
+            entity.getItems().add(toEntityItem(domain.getItems().get(i), entity, i));   //Hibernate throws its classic "collection no longer referenced by the owning entity instance"
         }
         return entity;
     }
@@ -77,7 +81,7 @@ public class InvoicePersistenceMapper {
 
     InvoiceItemJpaEntity toEntityItem(InvoiceItem domain, InvoiceJpaEntity invoice, int position) {
         InvoiceItemJpaEntity entity = new InvoiceItemJpaEntity();
-        entity.setId(domain.getId());
+        entity.setId(UUID.randomUUID());                //new id for Hibernate
         entity.setInvoice(invoice);
         entity.setProductId(domain.getProductId());
         entity.setDescription(domain.getDescription());

@@ -30,8 +30,8 @@ public class InvoiceRepositoryAdapter implements InvoiceRepository {
     @Transactional
     public Invoice save(Invoice invoice) {
         InvoiceJpaEntity entity = jpaRepository.findById(invoice.getId())
-                .map(existing -> mapper.applyTo(existing, invoice))
-                .orElseGet(() -> mapper.toEntity(invoice));
+                .map(existing -> mapper.applyTo(existing, invoice)) //if existed, apply does not create new obj
+                .orElseGet(() -> mapper.toEntity(invoice));                        //toEntity(), toDomain() create new obj
         return mapper.toDomain(jpaRepository.save(entity));
     }
 

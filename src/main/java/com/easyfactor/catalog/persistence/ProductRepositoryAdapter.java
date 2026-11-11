@@ -27,8 +27,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Product save(Product product) {
         ProductJpaEntity entity = jpaRepository.findById(product.getId())
-                .map(existing -> mapper.applyTo(existing, product))
-                .orElseGet(() -> mapper.toEntity(product));
+                .map(existing -> mapper.applyTo(existing, product))  //if existed, apply does not create new obj
+                .orElseGet(() -> mapper.toEntity(product));                         //toEntity() does!
         return mapper.toDomain(jpaRepository.save(entity));
     }
 

@@ -12,5 +12,7 @@ public interface CustomerRepository {
 
     Optional<Customer> findByTelegramUserId(Long telegramUserId);
 
+    Optional<Customer> findByOwnerIdAndPhoneNumber(UUID ownerId, String phoneNumber);
+
     Customer save(Customer customer);
 }

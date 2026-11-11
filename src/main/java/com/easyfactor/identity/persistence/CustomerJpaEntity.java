@@ -2,6 +2,7 @@ package com.easyfactor.identity.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,10 @@ import jakarta.persistence.Table;
 @Setter
 public class CustomerJpaEntity extends AuditableJpaEntity {
 
-    @Column(name = "telegram_user_id", unique = true)
+    @Column(name = "owner_id", nullable = false)
+    private UUID ownerId;
+
+    @Column(name = "telegram_user_id")
     private Long telegramUserId;
 
     @Column(name = "telegram_username", length = 64)

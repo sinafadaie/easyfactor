@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Adapter implementing the Owner persistence port over Spring Data JPA.
+ * Owner has not lazy fields, so we don't need @Transactional
  */
 @Repository
 public class OwnerRepositoryAdapter implements OwnerRepository {
@@ -35,8 +36,8 @@ public class OwnerRepositoryAdapter implements OwnerRepository {
     @Override
     public Owner save(Owner owner) {
         OwnerJpaEntity entity = jpaRepository.findById(owner.getId())
-                .map(existing -> mapper.applyTo(existing, owner))
-                .orElseGet(() -> mapper.toEntity(owner));
+                .map(existing -> mapper.applyTo(existing, owner))   //if existed, apply does not create new obj
+                .orElseGet(() -> mapper.toEntity(owner));                         //toEntity(), toDomain() create new obj
         return mapper.toDomain(jpaRepository.save(entity));
     }
 

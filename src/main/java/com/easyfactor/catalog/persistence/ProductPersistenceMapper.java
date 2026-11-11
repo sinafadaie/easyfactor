@@ -50,6 +50,7 @@ public class ProductPersistenceMapper {
 
     public ProductJpaEntity toEntity(Product domain) {
         ProductJpaEntity entity = new ProductJpaEntity();
+        entity.setId(domain.getId());
         return applyTo(entity, domain);
     }
 
