@@ -66,6 +66,9 @@ public class InvoiceJpaEntity extends AuditableJpaEntity {  //the id, createdAt,
     @Column(name = "dispatched_at")
     private Instant dispatchedAt;
 
+    @Column(name = "customer_id")
+    private UUID customerId;
+
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("position ASC")
     private List<InvoiceItemJpaEntity> items = new ArrayList<>();

@@ -24,6 +24,7 @@ public class InvoicePersistenceMapper {
                 entity.getCustomerLastName(),
                 entity.getCustomerAddress(),
                 entity.getCustomerPostalCode(),
+                entity.getCustomerId(),
                 entity.getItems().stream().map(this::toDomainItem).toList(),    //to list return immutable list, so we can not add any new item in future!
                 entity.getTotal(),
                 entity.getNotes(),
@@ -55,6 +56,7 @@ public class InvoicePersistenceMapper {
         entity.setCustomerLastName(domain.getCustomerLastName());
         entity.setCustomerAddress(domain.getCustomerAddress());
         entity.setCustomerPostalCode(domain.getCustomerPostalCode());
+        entity.setCustomerId(domain.getCustomerId());
         entity.setStatus(domain.getStatus().name());
         entity.setTotal(domain.getTotal());
         entity.setNotes(domain.getNotes());

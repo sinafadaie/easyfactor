@@ -15,6 +15,7 @@ public record InvoiceDraft(                 //A record in Java is a special kind
         String customerAddress,
         String customerPostalCode,
         String notes,
+        UUID customerId,                    //the client never sends it(it is not in CreateInvoiceRequest)
         List<Item> items) {
 
     public record Item(
@@ -22,5 +23,10 @@ public record InvoiceDraft(                 //A record in Java is a special kind
             String description,
             int quantity,
             long unitPrice) {
+    }
+
+    public InvoiceDraft withCustomerId(UUID customerId){
+        return new InvoiceDraft(customerPhoneNumber, customerFirstName, customerLastName,
+                customerAddress, customerPostalCode, notes, customerId, items);
     }
 }

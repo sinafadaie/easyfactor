@@ -21,13 +21,14 @@ public class Invoice {
     private final UUID id;
     private final String invoiceNumber;
     private final UUID ownerId;
-    private final String customerPhoneNumber;
-    private final String customerFirstName;
-    private final String customerLastName;
-    private final String customerAddress;
-    private final String customerPostalCode;
+    private  String customerPhoneNumber;
+    private  String customerFirstName;
+    private  String customerLastName;
+    private  String customerAddress;
+    private  String customerPostalCode;
     private final UUID publicToken;
     private final Instant createdAt;
+    private UUID customerId;
     private List<InvoiceItem> items;
     private long total;
     private String notes;
@@ -38,9 +39,9 @@ public class Invoice {
     private Instant updatedAt;
 
     public Invoice(UUID id, String invoiceNumber, UUID ownerId, String customerPhoneNumber,
-            String customerFirstName, String customerLastName, String customerAddress, String customerPostalCode,
-            List<InvoiceItem> items, long total, String notes, InvoiceStatus status, UUID publicToken,
-            String cancelReason, Instant createdAt, Instant paidAt, Instant dispatchedAt, Instant updatedAt) {
+                   String customerFirstName, String customerLastName, String customerAddress, String customerPostalCode, UUID customerId,
+                   List<InvoiceItem> items, long total, String notes, InvoiceStatus status, UUID publicToken,
+                   String cancelReason, Instant createdAt, Instant paidAt, Instant dispatchedAt, Instant updatedAt) {
         this.id = id;
         this.invoiceNumber = invoiceNumber;
         this.ownerId = ownerId;
@@ -49,6 +50,7 @@ public class Invoice {
         this.customerLastName = customerLastName;
         this.customerAddress = customerAddress;
         this.customerPostalCode = customerPostalCode;
+        this.customerId = customerId;
         this.items = items;
         this.total = total;
         this.notes = notes;
@@ -65,7 +67,7 @@ public class Invoice {
         List<InvoiceItem> items = buildItems(draft);
         Invoice invoice = new Invoice(id, invoiceNumber, ownerId, draft.customerPhoneNumber(),
                 draft.customerFirstName(), draft.customerLastName(), draft.customerAddress(),
-                draft.customerPostalCode(), items, 0, draft.notes(), InvoiceStatus.WAIT_FOR_PAYMENT,
+                draft.customerPostalCode(), draft.customerId(), items, 0, draft.notes(), InvoiceStatus.WAIT_FOR_PAYMENT,
                 UUID.randomUUID(), null, now, null, null, now);
         invoice.total = invoice.recalculateTotal();
         return invoice;
@@ -100,6 +102,12 @@ public class Invoice {
         }
         this.items = buildItems(draft);
         this.notes = draft.notes();
+        this.customerId = draft.customerId();
+        this.customerPhoneNumber = draft.customerPhoneNumber();
+        this.customerFirstName = draft.customerFirstName();
+        this.customerLastName = draft.customerLastName();
+        this.customerAddress = draft.customerAddress();
+        this.customerPostalCode = draft.customerPostalCode();
         this.total = recalculateTotal();
         this.updatedAt = now;
     }

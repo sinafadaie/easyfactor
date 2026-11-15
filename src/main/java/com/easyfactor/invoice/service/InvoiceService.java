@@ -3,6 +3,8 @@ package com.easyfactor.invoice.service;
 import java.time.Clock;
 import java.util.UUID;
 
+import com.easyfactor.identity.domain.Customer;
+import com.easyfactor.identity.domain.CustomerRepository;
 import com.easyfactor.invoice.domain.Invoice;
 import com.easyfactor.invoice.domain.InvoiceDraft;
 import com.easyfactor.invoice.domain.InvoiceNumberGenerator;
@@ -27,13 +29,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
+    private final CustomerRepository customerRepository;
     private final InvoiceNumberGenerator invoiceNumberGenerator;
     private final ApplicationEventPublisher eventPublisher;
     private final Clock clock;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceNumberGenerator invoiceNumberGenerator,
-            ApplicationEventPublisher eventPublisher, Clock clock) {
+    public InvoiceService(InvoiceRepository invoiceRepository, CustomerRepository customerRepository, InvoiceNumberGenerator invoiceNumberGenerator,
+                          ApplicationEventPublisher eventPublisher, Clock clock) {
         this.invoiceRepository = invoiceRepository;
+        this.customerRepository = customerRepository;
         this.invoiceNumberGenerator = invoiceNumberGenerator;
         this.eventPublisher = eventPublisher;
         this.clock = clock;
@@ -42,7 +46,11 @@ public class InvoiceService {
     @Transactional
     public Invoice createInvoice(UUID ownerId, InvoiceDraft draft) {
         String number = invoiceNumberGenerator.nextNumber();
-        Invoice invoice = Invoice.create(UUID.randomUUID(), number, ownerId, draft, clock.instant());
+        Customer customer = customerRepository.findByOwnerIdAndPhoneNumber(ownerId, draft.customerPhoneNumber())
+                .orElseThrow(() -> new NotFoundException("customer", draft.customerPhoneNumber()));
+
+        InvoiceDraft linkedDraft = draft.withCustomerId(customer.getId());
+        Invoice invoice = Invoice.create(UUID.randomUUID(), number, ownerId, linkedDraft, clock.instant());
         invoiceRepository.save(invoice);
         eventPublisher.publishEvent(new InvoiceCreatedEvent(invoice.getId(), invoice.getInvoiceNumber(), ownerId,
                 invoice.getTotal(), invoice.getCreatedAt()));
@@ -51,8 +59,11 @@ public class InvoiceService {
 
     @Transactional
     public Invoice updateInvoice(UUID ownerId, UUID invoiceId, InvoiceDraft draft) {
+        Customer customer = customerRepository.findByOwnerIdAndPhoneNumber(ownerId, draft.customerPhoneNumber())
+                .orElseThrow(() -> new NotFoundException("customer", draft.customerPhoneNumber()));
+        InvoiceDraft linkedDraft = draft.withCustomerId(customer.getId());
         Invoice invoice = getForOwner(ownerId, invoiceId);
-        invoice.update(draft, clock.instant());
+        invoice.update(linkedDraft, clock.instant());
         return invoiceRepository.save(invoice);
     }
 

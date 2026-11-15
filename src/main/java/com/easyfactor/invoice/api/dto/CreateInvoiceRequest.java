@@ -30,6 +30,7 @@ public record CreateInvoiceRequest(
                 customerAddress,
                 customerPostalCode,
                 notes,
+                null,
                 items.stream().map(CreateInvoiceItemRequest::toItem).toList());
     }
 }
