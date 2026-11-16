@@ -4,9 +4,15 @@ import com.easyfactor.invoice.domain.Invoice;
 import com.easyfactor.invoice.domain.InvoiceItem;
 import com.easyfactor.invoice.domain.InvoiceStatus;
 
+import com.easyfactor.shared.persistence.AuditableJpaEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Maps Invoice/InvoiceItem between domain aggregates and JPA entities.
@@ -64,10 +70,43 @@ public class InvoicePersistenceMapper {
         entity.setCancelReason(domain.getCancelReason());
         entity.setPaidAt(domain.getPaidAt());
         entity.setDispatchedAt(domain.getDispatchedAt());
-        entity.getItems().clear();                                                      //we should use old collection
-        for (int i = 0; i < domain.getItems().size(); i++) {                            //if replaces the persistent collection on a managed entity by new one—
-            entity.getItems().add(toEntityItem(domain.getItems().get(i), entity, i));   //Hibernate throws its classic "collection no longer referenced by the owning entity instance"
+
+        Map<UUID, InvoiceItemJpaEntity> existing = entity.getItems()
+                .stream()
+                        .collect(Collectors.toMap(InvoiceItemJpaEntity::getId, Function.identity()));
+
+        ArrayList<InvoiceItemJpaEntity> merge = new ArrayList<>();
+
+        Integer maxPosition = entity.getItems()
+                .stream()
+                .map(InvoiceItemJpaEntity::getPosition)
+                .max(Integer::compareTo)
+                .orElse(0);
+
+        boolean isNewItem ;
+        for (var item : domain.getItems()){
+            isNewItem = false;
+            InvoiceItemJpaEntity itemJpa = existing.remove(item.getId());   //if item is new, itemJpa will be null
+            if(itemJpa == null){
+                itemJpa = new InvoiceItemJpaEntity();
+                itemJpa.setId(item.getId());
+                itemJpa.setInvoice(entity);
+                isNewItem = true;
+            }
+            itemJpa.setProductId(item.getProductId());
+            itemJpa.setDescription(item.getDescription());
+            itemJpa.setQuantity(item.getQuantity());
+            itemJpa.setUnitPrice(item.getUnitPrice());
+            itemJpa.setLineTotal(item.getLineTotal());
+            if (isNewItem)
+                itemJpa.setPosition(++maxPosition);     //else the position is correct right now!
+
+
+            merge.add(itemJpa);
         }
+
+        entity.getItems().clear();
+        entity.getItems().addAll(merge);
         return entity;
     }
 
@@ -79,18 +118,5 @@ public class InvoicePersistenceMapper {
                 entity.getQuantity(),
                 entity.getUnitPrice(),
                 entity.getLineTotal());
-    }
-
-    InvoiceItemJpaEntity toEntityItem(InvoiceItem domain, InvoiceJpaEntity invoice, int position) {
-        InvoiceItemJpaEntity entity = new InvoiceItemJpaEntity();
-        entity.setId(UUID.randomUUID());                //new id for Hibernate
-        entity.setInvoice(invoice);
-        entity.setProductId(domain.getProductId());
-        entity.setDescription(domain.getDescription());
-        entity.setQuantity(domain.getQuantity());
-        entity.setUnitPrice(domain.getUnitPrice());
-        entity.setLineTotal(domain.getLineTotal());
-        entity.setPosition(position);
-        return entity;
     }
 }

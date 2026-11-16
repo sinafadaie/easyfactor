@@ -4,11 +4,15 @@ import com.easyfactor.identity.domain.Address;
 import com.easyfactor.identity.domain.Customer;
 import com.easyfactor.identity.domain.Owner;
 
+import com.easyfactor.shared.persistence.AuditableJpaEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Maps Owner/Customer between domain aggregates and JPA entities.
@@ -79,25 +83,31 @@ public class IdentityPersistenceMapper {
         entity.setTelegramUserId(domain.getTelegramUserId());
         entity.setTelegramUsername(domain.getTelegramUsername());
         entity.setOwnerId(domain.getOwnerId());
-        entity.getAddresses().clear();                                                              //we are erasing all the collection, and reinserting again, is that normal?
-        for (int i = 0; i < domain.getAddresses().size(); i++) {                                    //It's the standard pattern for value-object children:
-            entity.getAddresses().add(toEntityAddress(domain.getAddresses().get(i), entity));       //lines that have no meaningful life of their own (DDD)
-        }                                                                                           //but we should generate new id each time because Hibernate could make mistake
-        return entity;
-    }
 
-    public AddressJpaEntity toEntityAddress(Address address, CustomerJpaEntity entity) {
-        AddressJpaEntity jpa = new AddressJpaEntity();
-        jpa.setId(UUID.randomUUID());                   //new id for Hibernate
-        jpa.setLabel(address.label());
-        jpa.setLine1(address.line1());
-        jpa.setLine2(address.line2());
-        jpa.setCity(address.city());
-        jpa.setState(address.state());
-        jpa.setPostalCode(address.postalCode());
-        jpa.setCountry(address.country());
-        jpa.setCustomer(entity);
-        return jpa;
+        Map<UUID, AddressJpaEntity> existing = entity.getAddresses().stream()               //Map for finding based on id!
+                .collect(Collectors.toMap(AddressJpaEntity::getId, Function.identity()));
+
+        List<AddressJpaEntity> merged = new ArrayList<>();
+        for (Address address : domain.getAddresses()) {
+            AddressJpaEntity jpa = existing.remove(address.id());   // "check off": found = update, null = new
+            if (jpa == null) {
+                jpa = new AddressJpaEntity();
+                jpa.setId(address.id());
+                jpa.setCustomer(entity);
+            }
+            jpa.setLabel(address.label());
+            jpa.setLine1(address.line1());
+            jpa.setLine2(address.line2());
+            jpa.setCity(address.city());
+            jpa.setState(address.state());
+            jpa.setPostalCode(address.postalCode());
+            jpa.setCountry(address.country());
+            merged.add(jpa);
+        }
+
+        entity.getAddresses().clear();
+        entity.getAddresses().addAll(merged);
+        return entity;
     }
 
     public Address toDomainAddress(AddressJpaEntity entity) {   //due to DDD principle
